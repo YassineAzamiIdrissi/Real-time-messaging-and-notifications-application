@@ -1,17 +1,25 @@
 package com.example.real_time.User;
 
+import com.example.real_time.ActivationCode.ActivationCode;
+import com.example.real_time.Authority.Authority;
+import com.example.real_time.RecoveryCode.RecoveryCode;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @AllArgsConstructor
@@ -30,10 +38,32 @@ public class User implements Principal, UserDetails {
     private String lastName;
     private boolean enabled;
     private boolean locked;
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Column(insertable = false)
+    private LocalDateTime updatedAt;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_authorities",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "authority_id")
+    )
+    private List<Authority> authorities;
+
+    @OneToMany(mappedBy = "user")
+    private List<ActivationCode> activationCodes;
 
     public String fullName() {
         return firstName + " " + lastName;
     }
+
+
+    @OneToMany(mappedBy = "user")
+    private List<RecoveryCode> recoveryCodes;
 
     @Override
     public String getName() {
@@ -42,31 +72,33 @@ public class User implements Principal, UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return authorities.stream().map(
+                auth -> new SimpleGrantedAuthority(auth.getAuthority())
+        ).collect(Collectors.toList());
     }
 
     @Override
     public String getUsername() {
-        return "";
+        return email;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return UserDetails.super.isAccountNonExpired();
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return UserDetails.super.isAccountNonLocked();
+        return !locked;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return UserDetails.super.isCredentialsNonExpired();
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
+        return !enabled;
     }
 }
