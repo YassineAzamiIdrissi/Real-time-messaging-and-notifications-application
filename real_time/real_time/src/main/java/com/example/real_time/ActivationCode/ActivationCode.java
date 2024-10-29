@@ -2,6 +2,7 @@ package com.example.real_time.ActivationCode;
 
 
 import com.example.real_time.User.User;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,5 +28,6 @@ public class ActivationCode {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonInclude
     private User user;
 }
