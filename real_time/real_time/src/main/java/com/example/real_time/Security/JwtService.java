@@ -60,8 +60,8 @@ public class JwtService {
         return generateToken(userDetails, new HashMap<>());
     }
 
-    private String generateToken(UserDetails userDetails,
-                                 Map<String, Object> claims) {
+    public String generateToken(UserDetails userDetails,
+                                Map<String, Object> claims) {
         return buildToken(userDetails, claims, jwtExpiration);
     }
 
@@ -72,12 +72,12 @@ public class JwtService {
                 stream().map(GrantedAuthority::getAuthority).
                 toList();
         return Jwts.builder().
+                setClaims(claims).
                 setSubject(userDetails.getUsername()).
                 setIssuedAt(new Date(currentTimeMillis())).
                 setExpiration(new Date(currentTimeMillis() + jwtExp)).
-                setClaims(claims).
-                signWith(generateSignInKey()).
                 claim("authorities", auths).
+                signWith(generateSignInKey()).
                 compact();
     }
 

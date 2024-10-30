@@ -20,10 +20,11 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public class RecoveryCode {
     @Id
+    @GeneratedValue
     private Integer id;
     private String recoveryCode;
     private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private LocalDateTime expiresAt;
     private boolean used;
 
     @ManyToOne

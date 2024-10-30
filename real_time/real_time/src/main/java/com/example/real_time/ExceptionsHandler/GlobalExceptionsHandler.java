@@ -16,4 +16,14 @@ public class GlobalExceptionsHandler {
         return ResponseEntity.status(404).
                 body(dto);
     }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ExceptionRespDto> AppUserNotFoundException(
+            Exception exp
+    ) {
+        ExceptionRespDto dto = new ExceptionRespDto();
+        dto.setMessage(exp.getMessage());
+        return ResponseEntity.status(500).
+                body(dto);
+    }
 }

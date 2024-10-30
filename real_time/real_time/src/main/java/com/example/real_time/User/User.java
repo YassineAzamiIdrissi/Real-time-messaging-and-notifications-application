@@ -4,10 +4,7 @@ import com.example.real_time.ActivationCode.ActivationCode;
 import com.example.real_time.Authority.Authority;
 import com.example.real_time.RecoveryCode.RecoveryCode;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -30,6 +27,7 @@ import java.util.stream.Collectors;
 @Table(name = "_user")
 public class User implements Principal, UserDetails {
     @Id
+    @GeneratedValue
     private Integer id;
     @Column(unique = true)
     private String email;
@@ -99,6 +97,6 @@ public class User implements Principal, UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return !enabled;
+        return enabled;
     }
 }

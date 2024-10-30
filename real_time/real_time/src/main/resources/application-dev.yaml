@@ -32,5 +32,10 @@ spring:
 application:
   security:
     jwt:
-      jwtExpiration: 8640000
-      secret-key: cHJvYmxlbXNlY3Rpb25nb29kaGF2ZXNvbWVjbGVhcmx5eWV0cG9saXRpY2Fsc3RpbGxhdHRlbXB0bmF0aW9uaQ==
+      jwtExpiration: 864000000
+      secret-key: NiZDGe0bmR+kP9rKOuifGkCdoId16jBre0lEPmsjHbo=
+
+  front:
+    urls:
+      activation: http://localhost:4200/activate-account
+      recovery: http://localhost:4200/recover-password

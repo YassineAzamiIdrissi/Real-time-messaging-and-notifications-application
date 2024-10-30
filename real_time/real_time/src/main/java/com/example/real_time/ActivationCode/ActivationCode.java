@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public class ActivationCode {
     @Id
+    @GeneratedValue
     private Integer id;
     private String activationCode;
     private LocalDateTime createdAt;

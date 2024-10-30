@@ -22,6 +22,7 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 public class Authority {
     @Id
+    @GeneratedValue
     private Integer id;
     private String authority;
 
