@@ -1,0 +1,46 @@
+<div class="content-center">
+  <form style="width:600px; border:1px solid gray; border-radius: 1rem" class="p-4">
+    <div class="alert alert-danger"
+         *ngIf="errorMessages.length || simpErrorMessage">
+      <div class="" *ngIf="errorMessages.length">
+        <p class="p-0 m-0" *ngFor="let error of errorMessages">
+          {{ error }}
+        </p>
+      </div>
+      <div class="" *ngIf="simpErrorMessage">
+        <p class="p-0 m-0">{{ simpErrorMessage }}</p>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="email" class="form-label">Email address</label>
+      <input type="email" class="form-control" id="email"
+             name="email"
+             [(ngModel)]="authReq.email"
+      >
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input type="password" class="form-control" id="password"
+             name="password"
+             [(ngModel)]="authReq.password"
+      >
+    </div>
+    <div class="mb-3 d-flex justify-content-between">
+      <button type="submit" class="btn btn-primary"
+              (click)="login()"
+      >Login
+      </button>
+      <div class="d-flex align-items-center">
+        <button class="btn btn-link"
+                (click)="goToRegister()"
+        >Don't have an account, register now...
+        </button>
+      </div>
+    </div>
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-link" (click)="goToDemandRecovery()">
+        I forgot my password..
+      </button>
+    </div>
+  </form>
+</div>

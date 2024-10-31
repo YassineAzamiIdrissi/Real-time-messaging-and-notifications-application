@@ -73,7 +73,6 @@ public class AuthenticationService {
 
     public void register(RegistrationRequest req)
             throws MessagingException {
-        // todo - handle the Locked Exeption...
         Authority userAuth = authorityRepo.findByAuthority("USER").
                 orElseThrow(() ->
                         new AuthoritiesNotInitializedYetException
@@ -110,11 +109,10 @@ public class AuthenticationService {
 
     public void checkRecoveryCode(String recoveryCode)
             throws MessagingException {
-        // todo - handle messaging exception...
         RecoveryCode savedCode = recoveryCodeRepo.
                 findByRecoveryCode(recoveryCode).
                 orElseThrow(() -> new IncorrectRecoveryCodeException
-                        ("Incorrect recoveryCode : " + recoveryCode));
+                        ("Incorrect recovery code : " + recoveryCode));
         if (savedCode.getExpiresAt().isBefore(LocalDateTime.now())) {
             sendEmail(savedCode.getUser(), false);
             throw new RecoveryCodeExpiredException
@@ -126,6 +124,9 @@ public class AuthenticationService {
 
     public void demandRecoverPassword(String email)
             throws MessagingException {
+        if (email.isEmpty()) {
+            throw new InvalidOperationException("Email can't be empty !");
+        }
         User user = userRepo.findByEmail(email).
                 orElseThrow(() -> new
                         AppUserNotFoundException
@@ -135,7 +136,6 @@ public class AuthenticationService {
 
     public void activateAccount(String activationCode)
             throws MessagingException {
-        // todo - handle the disabled Exception...
         ActivationCode savedCode = activationCodeRepo.findByActivationCode(
                 activationCode
         ).orElseThrow(() -> new IncorrectActivationCode

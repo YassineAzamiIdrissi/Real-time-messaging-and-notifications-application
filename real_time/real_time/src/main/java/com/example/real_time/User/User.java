@@ -2,9 +2,14 @@ package com.example.real_time.User;
 
 import com.example.real_time.ActivationCode.ActivationCode;
 import com.example.real_time.Authority.Authority;
+import com.example.real_time.FriendRequest.FriendRequest;
+import com.example.real_time.FriendShip.FriendShips;
 import com.example.real_time.RecoveryCode.RecoveryCode;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -17,6 +22,8 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static jakarta.persistence.FetchType.EAGER;
 
 @Entity
 @AllArgsConstructor
@@ -44,7 +51,7 @@ public class User implements Principal, UserDetails {
     @Column(insertable = false)
     private LocalDateTime updatedAt;
 
-    @ManyToMany
+    @ManyToMany(fetch = EAGER)
     @JoinTable(
             name = "user_authorities",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -52,8 +59,21 @@ public class User implements Principal, UserDetails {
     )
     private List<Authority> authorities;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = EAGER)
     private List<ActivationCode> activationCodes;
+
+
+    @OneToMany(mappedBy = "sender", fetch = EAGER)
+    private List<FriendRequest> sentRequests;
+
+    @OneToMany(mappedBy = "receiver")
+    private List<FriendRequest> receivedRequests;
+
+    @OneToMany(mappedBy = "user")
+    private List<FriendShips> friends;
+
+    @OneToMany(mappedBy = "friend")
+    private List<FriendShips> friendOf;
 
     public String fullName() {
         return firstName + " " + lastName;

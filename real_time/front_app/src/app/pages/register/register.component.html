@@ -1,0 +1,55 @@
+<div class="content-center">
+  <form style="width:600px; border:1px solid gray; border-radius: 1rem" class="p-4">
+    <div class="mb-3 alert alert-warning" role="alert"
+         *ngIf="loading">
+      <p class="m-0 p-0">Processing...., please wait</p>
+    </div>
+    <div class="alert alert-danger" role="alert"
+         *ngIf="errors.length || simpErrorMessage">
+      <div *ngIf="errors.length">
+        <p class="m-0 p-0" *ngFor="let error of errors"> {{ error }}</p>
+      </div>
+      <div *ngIf="simpErrorMessage">
+        <p class="m-0 p-0">{{ simpErrorMessage }}</p>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="fname" class="form-label">First name</label>
+      <input type="text" class="form-control" id="fname"
+             [(ngModel)]="registerRequest.firstName"
+             name="firstname">
+    </div>
+    <div class="mb-3">
+      <label for="lname" class="form-label">Last name</label>
+      <input type="text" class="form-control" id="lname"
+             [(ngModel)]="registerRequest.lastName"
+             name="lastname">
+    </div>
+    <div class="mb-3">
+      <label for="email" class="form-label">Email address</label>
+      <input type="email" class="form-control" id="email"
+             [(ngModel)]="registerRequest.email"
+             name="email"
+      >
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input type="password" class="form-control" id="password"
+             [(ngModel)]="registerRequest.password"
+             name="password"
+      >
+    </div>
+    <div class="mb-3 d-flex justify-content-between">
+      <button type="submit" class="btn btn-primary"
+              (click)="register()">Register
+      </button>
+      <div class="d-flex align-items-center">
+        <button class="btn btn-link"
+                (click)="goToLogin()"
+        >I already have an account, login :
+        </button>
+      </div>
+    </div>
+
+  </form>
+</div>
