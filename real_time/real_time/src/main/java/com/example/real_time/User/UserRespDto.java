@@ -15,4 +15,5 @@ public class UserRespDto {
     private String firstname;
     private String lastname;
     private LocalDateTime joined;
+    private boolean isFriend;
 }

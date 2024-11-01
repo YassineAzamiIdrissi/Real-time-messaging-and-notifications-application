@@ -134,4 +134,13 @@ public class GlobalExceptionsHandler {
         return ResponseEntity.status(400).
                 body(dto);
     }
+
+    @ExceptionHandler(FriendRequestNotFoundException.class)
+    ResponseEntity<ExceptionRespDto>
+    FriendRequestNotFoundException(FriendRequestNotFoundException exp) {
+        ExceptionRespDto dto = new ExceptionRespDto();
+        dto.setMessage(exp.getMessage());
+        return ResponseEntity.status(500).
+                body(dto);
+    }
 }
