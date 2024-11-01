@@ -6,6 +6,7 @@ import {ActivateAccountComponent} from "./pages/activate-account/activate-accoun
 import {DemandPasswordComponent} from "./pages/demand-password/demand-password.component";
 import {CheckRecoveryComponent} from "./pages/check-recovery/check-recovery.component";
 import {SetNewPasswordComponent} from "./pages/set-new-password/set-new-password.component";
+import {authGuard} from "../AuthGuard/auth.guard";
 
 const routes: Routes = [
   {
@@ -36,12 +37,20 @@ const routes: Routes = [
   {
     path: "set-new-password",
     component: SetNewPasswordComponent
-  }
+  },
+  {
+    path: "users",
+    loadChildren: () => import("../modules/users/users.module").then
+    (module => module.UsersModule),
+    canActivate: [authGuard]
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule {
+export class AppRoutingModule
+{
+
 }

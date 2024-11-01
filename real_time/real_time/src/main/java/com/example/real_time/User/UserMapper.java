@@ -16,6 +16,7 @@ public class UserMapper {
     public UserRespDto userToUserRespDto
             (User user, User connected) {
         return UserRespDto.builder().
+                id(user.getId()).
                 firstname(user.getFirstName()).
                 lastname(user.getLastName()).
                 joined(user.getCreatedAt()).
@@ -31,6 +32,7 @@ public class UserMapper {
             friend = request.getSender();
         }
         return UserRespDto.builder().
+                id(friend.getId()).
                 firstname(friend.getFirstName()).
                 lastname(friend.getLastName()).
                 isFriend(true).

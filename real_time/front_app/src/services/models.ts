@@ -4,5 +4,9 @@
 
 export { AuthenticationRequest } from './models/authentication-request';
 export { AuthenticationResponse } from './models/authentication-response';
+export { FriendRequestRespDto } from './models/friend-request-resp-dto';
+export { PageResponseFriendRequestRespDto } from './models/page-response-friend-request-resp-dto';
+export { PageResponseUserRespDto } from './models/page-response-user-resp-dto';
 export { PasswordsCoupleRequest } from './models/passwords-couple-request';
 export { RegistrationRequest } from './models/registration-request';
+export { UserRespDto } from './models/user-resp-dto';

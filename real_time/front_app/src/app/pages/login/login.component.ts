@@ -34,6 +34,7 @@ export class LoginComponent {
       {
         next: (resp) => {
           this.tokenService.token = resp.token as string;
+          this.router.navigate(["users"]);
         },
         error: (err) => {
           if (err.error.errors) {

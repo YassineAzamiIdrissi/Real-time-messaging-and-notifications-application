@@ -2,12 +2,12 @@
   <form style="width:600px; border:1px solid gray; border-radius: 1rem" class="p-4">
     <div class="alert alert-danger"
          *ngIf="errorMessages.length || simpErrorMessage">
-      <div class="" *ngIf="errorMessages.length">
+      <div *ngIf="errorMessages.length">
         <p class="p-0 m-0" *ngFor="let error of errorMessages">
           {{ error }}
         </p>
       </div>
-      <div class="" *ngIf="simpErrorMessage">
+      <div *ngIf="simpErrorMessage">
         <p class="p-0 m-0">{{ simpErrorMessage }}</p>
       </div>
     </div>

@@ -1,6 +1,5 @@
 package com.example.real_time.FriendRequest;
 
-import com.example.real_time.User.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

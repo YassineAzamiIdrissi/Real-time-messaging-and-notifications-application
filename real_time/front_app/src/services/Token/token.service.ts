@@ -23,7 +23,7 @@ export class TokenService {
       return false;
     }
     const jwtHelper = new JwtHelperService();
-    if (jwtHelper.isTokenExpired()) {
+    if (jwtHelper.isTokenExpired(token)) {
       localStorage.removeItem("token");
       return false;
     }

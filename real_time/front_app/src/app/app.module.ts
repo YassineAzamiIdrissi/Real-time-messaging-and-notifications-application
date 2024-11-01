@@ -9,9 +9,10 @@ import {ActivateAccountComponent} from './pages/activate-account/activate-accoun
 import {DemandPasswordComponent} from './pages/demand-password/demand-password.component';
 import {CheckRecoveryComponent} from './pages/check-recovery/check-recovery.component';
 import {SetNewPasswordComponent} from './pages/set-new-password/set-new-password.component';
-import {provideHttpClient, withInterceptorsFromDi} from "@angular/common/http";
+import {provideHttpClient, withInterceptors, withInterceptorsFromDi} from "@angular/common/http";
 import {FormsModule} from "@angular/forms";
 import {CodeInputModule} from "angular-code-input";
+import {tokenInterceptor} from "../services/interceptors/token.interceptor";
 
 @NgModule({
   declarations: [
@@ -30,9 +31,11 @@ import {CodeInputModule} from "angular-code-input";
     CodeInputModule
   ],
   providers: [
-    provideHttpClient(withInterceptorsFromDi())
+    provideHttpClient(withInterceptorsFromDi(),
+      withInterceptors([tokenInterceptor]))
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
+
 }

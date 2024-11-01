@@ -8,19 +8,15 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { PasswordsCoupleRequest } from '../../models/passwords-couple-request';
 
-export interface SetNewPassword$Params {
-  recovery: string;
-      body: PasswordsCoupleRequest
+export interface AddUser$Params {
+  userId: number;
 }
 
-export function setNewPassword(http: HttpClient, rootUrl: string, params: SetNewPassword$Params, context?: HttpContext): Observable<StrictHttpResponse<{
-}>> {
-  const rb = new RequestBuilder(rootUrl, setNewPassword.PATH, 'patch');
+export function addUser(http: HttpClient, rootUrl: string, params: AddUser$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+  const rb = new RequestBuilder(rootUrl, addUser.PATH, 'post');
   if (params) {
-    rb.path('recovery', params.recovery, {});
-    rb.body(params.body, 'application/json');
+    rb.path('userId', params.userId, {});
   }
 
   return http.request(
@@ -28,10 +24,9 @@ export function setNewPassword(http: HttpClient, rootUrl: string, params: SetNew
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<{
-      }>;
+      return (r as HttpResponse<any>).clone({ body: parseFloat(String((r as HttpResponse<any>).body)) }) as StrictHttpResponse<number>;
     })
   );
 }
 
-setNewPassword.PATH = '/auth/new-password/{recovery}';
+addUser.PATH = '/users/add/{userId}';

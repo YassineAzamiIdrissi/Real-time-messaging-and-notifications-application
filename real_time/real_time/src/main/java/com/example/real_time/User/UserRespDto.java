@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 public class UserRespDto {
+    private Integer id;
     private String firstname;
     private String lastname;
     private LocalDateTime joined;

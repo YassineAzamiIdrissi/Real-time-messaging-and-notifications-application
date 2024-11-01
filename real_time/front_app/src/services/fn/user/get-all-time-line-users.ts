@@ -8,19 +8,18 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { PasswordsCoupleRequest } from '../../models/passwords-couple-request';
+import { PageResponseUserRespDto } from '../../models/page-response-user-resp-dto';
 
-export interface SetNewPassword$Params {
-  recovery: string;
-      body: PasswordsCoupleRequest
+export interface GetAllTimeLineUsers$Params {
+  page?: number;
+  size?: number;
 }
 
-export function setNewPassword(http: HttpClient, rootUrl: string, params: SetNewPassword$Params, context?: HttpContext): Observable<StrictHttpResponse<{
-}>> {
-  const rb = new RequestBuilder(rootUrl, setNewPassword.PATH, 'patch');
+export function getAllTimeLineUsers(http: HttpClient, rootUrl: string, params?: GetAllTimeLineUsers$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseUserRespDto>> {
+  const rb = new RequestBuilder(rootUrl, getAllTimeLineUsers.PATH, 'get');
   if (params) {
-    rb.path('recovery', params.recovery, {});
-    rb.body(params.body, 'application/json');
+    rb.query('page', params.page, {});
+    rb.query('size', params.size, {});
   }
 
   return http.request(
@@ -28,10 +27,9 @@ export function setNewPassword(http: HttpClient, rootUrl: string, params: SetNew
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<{
-      }>;
+      return r as StrictHttpResponse<PageResponseUserRespDto>;
     })
   );
 }
 
-setNewPassword.PATH = '/auth/new-password/{recovery}';
+getAllTimeLineUsers.PATH = '/users';
