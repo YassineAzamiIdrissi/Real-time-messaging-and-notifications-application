@@ -6,6 +6,9 @@ import com.example.real_time.CustomExceptions.InvalidOperationException;
 import com.example.real_time.FriendRequest.FriendRequest;
 import com.example.real_time.FriendRequest.FriendRequestRepository;
 import com.example.real_time.FriendRequest.FriendRequestRespDto;
+import com.example.real_time.Notification.Notification;
+import com.example.real_time.Notification.NotificationService;
+import com.example.real_time.Notification.NotificationType;
 import com.example.real_time.Pagination.PageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,6 +22,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
+import static com.example.real_time.Notification.NotificationType.*;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -26,6 +31,7 @@ public class UserService {
     private final UserRepository userRepo;
     private final FriendRequestRepository reqRepo;
     private final UserMapper userMapper;
+    private final NotificationService notificationService;
 
     public PageResponse<UserRespDto>
     getDisplayableUsers(int page, int size, Authentication authentication) {
@@ -84,7 +90,15 @@ public class UserService {
                 receiver(concernedUser).
                 accepted(false).
                 build();
-        return reqRepo.save(request).getId();
+        var saved = reqRepo.save(request);
+        Notification notification = Notification.builder().
+                title("New request").
+                content(connectedUser.fullName() + " sent a friend request").
+                type(FRIEND_REQUEST).
+                build();
+        notificationService.sendNotification(notification,
+                concernedUser.getId());
+        return saved.getId();
     }
 
     public PageResponse<UserRespDto>
@@ -130,7 +144,15 @@ public class UserService {
                     ("you can't accept requests that aren't sent to you !");
         }
         concernedRequest.setAccepted(true);
-        return reqRepo.save(concernedRequest).getId();
+        var saved = reqRepo.save(concernedRequest);
+        Notification notification = Notification.builder().
+                title("Request accepted").
+                content(connected.fullName() + " accepted your request").
+                type(FRIEND_REQUEST_ACCEPTED).
+                build();
+        notificationService.sendNotification
+                (notification, concernedRequest.getSender().getId());
+        return saved.getId();
     }
 
     public Integer refuseFriendRequest(Integer reqId,
@@ -144,8 +166,17 @@ public class UserService {
             throw new InvalidOperationException("you can't refuse requests that aren't sent to you !");
         }
         concernedReq.setAccepted(false);
-        concernedReq.setUpdatedAt(LocalDateTime.now()   );
-        return reqRepo.save(concernedReq).getId();
+        concernedReq.setUpdatedAt(LocalDateTime.now());
+        var saved = reqRepo.save(concernedReq);
+        Notification notification = Notification.builder().
+                title("Request refused").
+                content(connected.fullName() + " refused your request..").
+                type(FRIEND_REQUEST_REFUSED).
+                build();
+        notificationService.sendNotification(
+                notification, concernedReq.getSender().getId()
+        );
+        return saved.getId();
     }
 
     public PageResponse<FriendRequestRespDto>
