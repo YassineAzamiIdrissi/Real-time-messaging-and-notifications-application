@@ -1,8 +1,12 @@
 package com.example.real_time.User;
 
+import com.example.real_time.CustomExceptions.AppUserNotFoundException;
 import com.example.real_time.FriendRequest.FriendRequest;
 import com.example.real_time.FriendRequest.FriendRequestRepository;
 import com.example.real_time.FriendRequest.FriendRequestRespDto;
+import com.example.real_time.Message.Message;
+import com.example.real_time.Message.MessageDto;
+import com.example.real_time.Message.MessageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +16,8 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class UserMapper {
     private final FriendRequestRepository reqRepo;
+    private final MessageRepository msgRepo;
+    private final UserRepository userRepo;
 
     public UserRespDto userToUserRespDto
             (User user, User connected) {
@@ -48,6 +54,30 @@ public class UserMapper {
                 sentAt(req.getCreatedAt()).
                 accepted(req.isAccepted()).
                 answered(req.getUpdatedAt() != null).
+                build();
+    }
+
+    public Message msgReqToMsg(MessageDto msgReq) {
+        User sender = userRepo.findById(msgReq.getSenderId()).
+                orElseThrow(() -> new AppUserNotFoundException(
+                        "User with id " + msgReq.getSenderId() + " isn't found"
+                ));
+        User receiver = userRepo.findById(msgReq.getReceiverId()).
+                orElseThrow(() -> new AppUserNotFoundException(
+                        "User with id " + msgReq.getReceiverId() + " isn't found"));
+        return Message.builder().
+                sender(sender).
+                receiver(receiver).
+                content(msgReq.getContent()).
+                build();
+    }
+
+    public MessageDto msgToMessageDto(Message msg) {
+        return MessageDto.
+                builder().
+                senderId(msg.getSender().getId()).
+                receiverId(msg.getReceiver().getId()).
+                content(msg.getContent()).
                 build();
     }
 }

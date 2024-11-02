@@ -3,6 +3,7 @@ package com.example.real_time.User;
 import com.example.real_time.ActivationCode.ActivationCode;
 import com.example.real_time.Authority.Authority;
 import com.example.real_time.FriendRequest.FriendRequest;
+import com.example.real_time.Message.Message;
 import com.example.real_time.RecoveryCode.RecoveryCode;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -69,11 +70,12 @@ public class User implements Principal, UserDetails {
     private List<FriendRequest> receivedRequests;
 
 
-    public String fullName() {
-        return firstName + " " + lastName;
-    }
+    @OneToMany(mappedBy = "sender", fetch = EAGER)
+    private List<Message> sentMessages;
 
-
+    @OneToMany(mappedBy = "receiver", fetch = EAGER)
+    private List<Message> receivedMessages;
+    
     @OneToMany(mappedBy = "user")
     private List<RecoveryCode> recoveryCodes;
 
@@ -114,4 +116,7 @@ public class User implements Principal, UserDetails {
         return enabled;
     }
 
+    public String fullName() {
+        return firstName + " " + lastName;
+    }
 }
