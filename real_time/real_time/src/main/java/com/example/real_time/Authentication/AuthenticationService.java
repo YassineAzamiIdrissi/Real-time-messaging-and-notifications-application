@@ -39,7 +39,6 @@ public class AuthenticationService {
     private final AuthorityRepository authorityRepo;
 
     private final PasswordEncoder passwordEncoder;
-    private final AuthenticationProvider authenticationProvider;
     private final AuthenticationManager authenticationManager;
 
     private final JwtService jwtService;
@@ -57,15 +56,12 @@ public class AuthenticationService {
                 req.getEmail(),
                 req.getPassword()
         );
-        System.out.println("BLOC A");
         var authentication = authenticationManager.authenticate(authToken);
         Map<String, Object> claims = new HashMap<>();
         User user = (User) authentication.getPrincipal();
-        System.out.println("BLOC B");
+        claims.put("userId", user.getId());
         claims.put("fullName", user.fullName());
         String token = jwtService.generateToken(user, claims);
-        System.out.println(token);
-        System.out.println("BLOC C");
         return AuthenticationResponse.builder().
                 token(token).
                 build();

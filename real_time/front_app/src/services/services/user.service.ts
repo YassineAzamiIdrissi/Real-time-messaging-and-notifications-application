@@ -25,6 +25,8 @@ import { PageResponseFriendRequestRespDto } from '../models/page-response-friend
 import { PageResponseUserRespDto } from '../models/page-response-user-resp-dto';
 import { refuseRequest } from '../fn/user/refuse-request';
 import { RefuseRequest$Params } from '../fn/user/refuse-request';
+import { unfriendUser } from '../fn/user/unfriend-user';
+import { UnfriendUser$Params } from '../fn/user/unfriend-user';
 
 @Injectable({ providedIn: 'root' })
 export class UserService extends BaseService {
@@ -179,6 +181,35 @@ export class UserService extends BaseService {
   fetchAllThisUserFriends(params?: FetchAllThisUserFriends$Params, context?: HttpContext): Observable<PageResponseUserRespDto> {
     return this.fetchAllThisUserFriends$Response(params, context).pipe(
       map((r: StrictHttpResponse<PageResponseUserRespDto>): PageResponseUserRespDto => r.body)
+    );
+  }
+
+  /** Path part for operation `unfriendUser()` */
+  static readonly UnfriendUserPath = '/users/unfriend/{userId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `unfriendUser()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  unfriendUser$Response(params: UnfriendUser$Params, context?: HttpContext): Observable<StrictHttpResponse<{
+}>> {
+    return unfriendUser(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `unfriendUser$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  unfriendUser(params: UnfriendUser$Params, context?: HttpContext): Observable<{
+}> {
+    return this.unfriendUser$Response(params, context).pipe(
+      map((r: StrictHttpResponse<{
+}>): {
+} => r.body)
     );
   }
 

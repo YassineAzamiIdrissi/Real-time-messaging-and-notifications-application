@@ -80,5 +80,16 @@ public class UserController {
                 body(userService.refuseFriendRequest(reqId, authentication)
                 );
     }
+
+    @DeleteMapping("unfriend/{userId}")
+    ResponseEntity<?> unfriendUser(
+            @PathVariable("userId") Integer userId,
+            Authentication authentication
+    ) {
+        System.out.println("Controller Executed....");
+        userService.unfriendUser(userId, authentication);
+        return ResponseEntity.ok().
+                build();
+    }
 }
 

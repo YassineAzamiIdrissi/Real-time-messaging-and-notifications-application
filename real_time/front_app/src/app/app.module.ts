@@ -13,6 +13,7 @@ import {provideHttpClient, withInterceptors, withInterceptorsFromDi} from "@angu
 import {FormsModule} from "@angular/forms";
 import {CodeInputModule} from "angular-code-input";
 import {tokenInterceptor} from "../services/interceptors/token.interceptor";
+import {ToastrModule} from "ngx-toastr";
 
 @NgModule({
   declarations: [
@@ -22,13 +23,25 @@ import {tokenInterceptor} from "../services/interceptors/token.interceptor";
     ActivateAccountComponent,
     DemandPasswordComponent,
     CheckRecoveryComponent,
-    SetNewPasswordComponent
+    SetNewPasswordComponent,
+
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    CodeInputModule
+    CodeInputModule,
+    ToastrModule.forRoot(
+      {
+        tapToDismiss: true,
+        closeButton: true,
+        preventDuplicates: true,
+        countDuplicates: true,
+        resetTimeoutOnDuplicate: true,
+        progressBar: true,
+        progressAnimation: 'increasing'
+      }
+    )
   ],
   providers: [
     provideHttpClient(withInterceptorsFromDi(),

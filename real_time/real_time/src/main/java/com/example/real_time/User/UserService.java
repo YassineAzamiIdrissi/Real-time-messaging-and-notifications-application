@@ -207,6 +207,28 @@ public class UserService {
                 requests.getNumber(),
                 requests.getSize()
         );
+    }
 
+    public void unfriendUser(Integer userid, Authentication authentication) {
+        User connected = (User) authentication.getPrincipal();
+        User concernedFriend = userRepo.findById(userid).
+                orElseThrow(
+                        () -> new AppUserNotFoundException
+                                ("user with id " + userid + " is not found !")
+                );
+        boolean isAlreadyFriend = reqRepo.isAlreadyFriends(
+                connected.getId(), concernedFriend.getId()
+        );
+        if (!isAlreadyFriend) {
+            throw new InvalidOperationException
+                    ("you can't unfriend this user... " +
+                            "since it isn't already your friend");
+        }
+        FriendRequest concernedRequest =
+                reqRepo.findFriendShip(
+                        connected.getId(),
+                        concernedFriend.getId()
+                );
+        reqRepo.deleteById(concernedRequest.getId());
     }
 }

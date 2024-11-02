@@ -442,6 +442,37 @@
           }
         }
       }
+    },
+    "/users/unfriend/{userId}": {
+      "delete": {
+        "tags": [
+          "user"
+        ],
+        "operationId": "unfriendUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {

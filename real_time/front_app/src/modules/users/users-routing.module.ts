@@ -3,6 +3,8 @@ import {RouterModule, Routes} from '@angular/router';
 import {LayoutComponent} from "./Layout/layout/layout.component";
 import {UsersListComponent} from "./Pages/users-list/users-list.component";
 import {authGuard} from "../../AuthGuard/auth.guard";
+import {FriendsListComponent} from "./Pages/friends-list/friends-list.component";
+import {RequestsListComponent} from "./Pages/requests-list/requests-list.component";
 
 const routes: Routes = [
   {
@@ -13,6 +15,16 @@ const routes: Routes = [
       {
         path: "",
         component: UsersListComponent,
+        canActivate: [authGuard]
+      },
+      {
+        path: "friends",
+        component: FriendsListComponent,
+        canActivate: [authGuard]
+      },
+      {
+        path: "requests",
+        component: RequestsListComponent,
         canActivate: [authGuard]
       }
     ]

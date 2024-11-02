@@ -5,6 +5,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.Optional;
+
 public interface FriendRequestRepository extends JpaRepository<FriendRequest, Integer> {
 
     // Mistake : there is no = NULL in JPQL but only IS Null...
@@ -54,4 +56,18 @@ public interface FriendRequestRepository extends JpaRepository<FriendRequest, In
             """)
     boolean isUserAddableByConnected(Integer connectedId, Integer
             userId);
+
+    @Query("""
+                      SELECT request FROM FriendRequest request
+                      WHERE ((
+                        request.sender.id = :connectedId 
+                        AND request.receiver.id = :friendId 
+                      ) OR (
+                      request.sender.id = :friendId 
+                        AND request.receiver.id = :connectedId 
+                      )) AND 
+                      request.accepted = true  
+            """)
+    FriendRequest findFriendShip(Integer connectedId, Integer friendId);
 }
+

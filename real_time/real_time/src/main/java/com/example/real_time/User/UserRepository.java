@@ -16,9 +16,11 @@ public interface UserRepository extends JpaRepository<User, Integer> {
                  AND user.enabled = TRUE
                  AND user.locked = FALSE
                  AND NOT EXISTS (
-                     SELECT 1 FROM FriendRequest request
-                     WHERE request.receiver.id = user.id
-                     AND request.sender.id = :userId
+                     (SELECT 1 FROM FriendRequest request
+                     WHERE (request.receiver.id = user.id
+                     AND request.sender.id = :userId) OR 
+                     (request.receiver.id = :userId
+                     AND request.sender.id =  user.id)) 
                  )
             """)
     Page<User> findDisplayableUsersForConnectedOne

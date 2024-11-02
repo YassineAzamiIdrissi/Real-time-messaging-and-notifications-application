@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {UserService} from "../../../../services/services/user.service";
 import {PageResponseUserRespDto} from "../../../../services/models/page-response-user-resp-dto";
+import {ToastrService} from "ngx-toastr";
+import {UserRespDto} from "../../../../services/models/user-resp-dto";
 
 @Component({
   selector: 'app-users-list',
@@ -11,11 +13,17 @@ import {PageResponseUserRespDto} from "../../../../services/models/page-response
 export class UsersListComponent implements OnInit {
 
   users: PageResponseUserRespDto = {};
+  usersContent: Array<UserRespDto> = [];
   page: number = 0;
   size: number = 5;
+  first: boolean = false;
+  last: boolean = false;
+  number: number = 0;
+  totalPages: number = 0;
 
   constructor(private router: Router,
-              private userService: UserService) {
+              private userService: UserService,
+              private toasterService: ToastrService) {
   }
 
   ngOnInit() {
@@ -29,13 +37,35 @@ export class UsersListComponent implements OnInit {
     }).subscribe(
       {
         next: (resp) => {
-          this.users = resp;
+          this.usersContent = resp.content as Array<UserRespDto>;
+          this.first = resp.first as boolean;
+          this.last = resp.last as boolean;
+          this.number = resp.number as number;
+          this.totalPages = resp.totalPages as number;
         },
         error: (err) => {
           console.log(err);
         }
       }
     )
+  }
+
+  addFriend(userId: number | undefined) {
+    const grId = userId as number;
+    this.userService.addUser({
+      "userId": grId
+    }).subscribe({
+      next: (resp) => {
+        this.toasterService.info("Request sent successfully");
+        this.usersContent = this.usersContent.filter((element) => {
+          return element.id != userId;
+        });
+      },
+      error: (err) => {
+        this.toasterService.error("Something went wrong.. try again later");
+        console.log(err);
+      }
+    })
   }
 
   goToPreviousPage() {
@@ -54,7 +84,7 @@ export class UsersListComponent implements OnInit {
   }
 
   goToLastPage() {
-    this.page = this.users.totalPages as number - 1;
+    this.page = this.totalPages as number - 1;
     this.fetchAllUsers();
   }
 
