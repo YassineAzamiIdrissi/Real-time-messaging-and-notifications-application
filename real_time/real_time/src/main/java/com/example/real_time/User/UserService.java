@@ -6,6 +6,10 @@ import com.example.real_time.CustomExceptions.InvalidOperationException;
 import com.example.real_time.FriendRequest.FriendRequest;
 import com.example.real_time.FriendRequest.FriendRequestRepository;
 import com.example.real_time.FriendRequest.FriendRequestRespDto;
+import com.example.real_time.Message.Message;
+import com.example.real_time.Message.MessageDto;
+import com.example.real_time.Message.MessageRepository;
+import com.example.real_time.Message.MessageService;
 import com.example.real_time.Notification.Notification;
 import com.example.real_time.Notification.NotificationService;
 import com.example.real_time.Notification.NotificationType;
@@ -30,8 +34,12 @@ public class UserService {
 
     private final UserRepository userRepo;
     private final FriendRequestRepository reqRepo;
+    private final MessageRepository msgRepo;
+
     private final UserMapper userMapper;
+
     private final NotificationService notificationService;
+    private final MessageService msgService;
 
     public PageResponse<UserRespDto>
     getDisplayableUsers(int page, int size, Authentication authentication) {
@@ -230,5 +238,21 @@ public class UserService {
                         concernedFriend.getId()
                 );
         reqRepo.deleteById(concernedRequest.getId());
+    }
+
+    public Integer sendMessage(Integer toId,
+                               MessageDto message,
+                               Authentication authentication) {
+        User connected = (User) authentication.getPrincipal();
+        User receiver = userRepo.findById(toId).orElseThrow
+                (() -> new AppUserNotFoundException(
+                        "User with id" + toId + " isn't found"
+                ));
+        message.setSenderId(connected.getId());
+        message.setReceiverId(toId);
+        Message savedMessage = userMapper.msgReqToMsg(message);
+        Message saved = msgRepo.save(savedMessage);
+        msgService.sendMessage(message.getReceiverId(), message);
+        return saved.getId();
     }
 }

@@ -1,6 +1,7 @@
 package com.example.real_time.User;
 
 import com.example.real_time.FriendRequest.FriendRequestRespDto;
+import com.example.real_time.Message.MessageDto;
 import com.example.real_time.Pagination.PageResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -90,6 +91,18 @@ public class UserController {
         userService.unfriendUser(userId, authentication);
         return ResponseEntity.ok().
                 build();
+    }
+
+    @PostMapping("messages/{userId}")
+    ResponseEntity<Integer> sendMessage(
+            @PathVariable("userId") Integer userId,
+            @RequestBody MessageDto messageDto,
+            Authentication authentication
+    ) {
+        return ResponseEntity.ok().
+                body(userService.sendMessage
+                        (userId, messageDto, authentication)
+                );
     }
 }
 
