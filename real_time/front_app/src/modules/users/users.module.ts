@@ -7,6 +7,8 @@ import { LayoutComponent } from './Layout/layout/layout.component';
 import { UsersListComponent } from './Pages/users-list/users-list.component';
 import { FriendsListComponent } from './Pages/friends-list/friends-list.component';
 import { RequestsListComponent } from './Pages/requests-list/requests-list.component';
+import { ConversationComponent } from './Pages/conversation/conversation.component';
+import {FormsModule} from "@angular/forms";
 
 
 @NgModule({
@@ -15,11 +17,13 @@ import { RequestsListComponent } from './Pages/requests-list/requests-list.compo
     LayoutComponent,
     UsersListComponent,
     FriendsListComponent,
-    RequestsListComponent
+    RequestsListComponent,
+    ConversationComponent
   ],
-  imports: [
-    CommonModule,
-    UsersRoutingModule
-  ]
+    imports: [
+        CommonModule,
+        UsersRoutingModule,
+        FormsModule
+    ]
 })
 export class UsersModule { }

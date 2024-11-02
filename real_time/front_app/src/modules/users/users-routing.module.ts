@@ -5,6 +5,7 @@ import {UsersListComponent} from "./Pages/users-list/users-list.component";
 import {authGuard} from "../../AuthGuard/auth.guard";
 import {FriendsListComponent} from "./Pages/friends-list/friends-list.component";
 import {RequestsListComponent} from "./Pages/requests-list/requests-list.component";
+import {ConversationComponent} from "./Pages/conversation/conversation.component";
 
 const routes: Routes = [
   {
@@ -25,6 +26,11 @@ const routes: Routes = [
       {
         path: "requests",
         component: RequestsListComponent,
+        canActivate: [authGuard]
+      },
+      {
+        path: "spec-messages",
+        component: ConversationComponent,
         canActivate: [authGuard]
       }
     ]

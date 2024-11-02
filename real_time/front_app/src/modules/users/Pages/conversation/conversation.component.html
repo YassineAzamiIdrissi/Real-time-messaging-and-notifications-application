@@ -1,0 +1,35 @@
+<div class="d-flex flex-column gap-2 full-height">
+  <div class="custom-panel">
+    <div [class]="msg.sender == userId ? 'message own-message':'message friend-message'"
+         *ngFor="let msg of conversation">
+      {{ msg.content }}
+    </div>
+  </div>
+  <div class="message-action-inset">
+    <div class="form-floating section-f">
+    <textarea class="form-control" placeholder="Write your message"
+              id="messageTextArea"
+              [(ngModel)]="msg"
+              name="txtarea"
+    ></textarea>
+      <label for="messageTextArea">Message</label>
+    </div>
+    <button class="btn btn-primary bg-btn"
+            (click)="sendMessage()">Send
+    </button>
+  </div>
+  <div class="message-action-inset">
+    <div class="form-floating section-f">
+    <textarea class="form-control" placeholder="Write your message"
+              id="messageTextArea2"
+              [(ngModel)]="resp"
+              name="txtarea"
+    ></textarea>
+      <label for="messageTextArea2">Message</label>
+    </div>
+    <button class="btn btn-primary bg-btn"
+            (click)="answerMessage()">Send
+    </button>
+  </div>
+
+</div>
