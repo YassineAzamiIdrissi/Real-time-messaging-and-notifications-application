@@ -7,6 +7,7 @@ export { AuthenticationResponse } from './models/authentication-response';
 export { FriendRequestRespDto } from './models/friend-request-resp-dto';
 export { MessageDto } from './models/message-dto';
 export { PageResponseFriendRequestRespDto } from './models/page-response-friend-request-resp-dto';
+export { PageResponseMessageDto } from './models/page-response-message-dto';
 export { PageResponseUserRespDto } from './models/page-response-user-resp-dto';
 export { PasswordsCoupleRequest } from './models/passwords-couple-request';
 export { RegistrationRequest } from './models/registration-request';

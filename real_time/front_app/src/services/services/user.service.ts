@@ -21,7 +21,12 @@ import { getAllReceivedRequests } from '../fn/user/get-all-received-requests';
 import { GetAllReceivedRequests$Params } from '../fn/user/get-all-received-requests';
 import { getAllTimeLineUsers } from '../fn/user/get-all-time-line-users';
 import { GetAllTimeLineUsers$Params } from '../fn/user/get-all-time-line-users';
+import { getSpecificUser } from '../fn/user/get-specific-user';
+import { GetSpecificUser$Params } from '../fn/user/get-specific-user';
+import { loadConversation } from '../fn/user/load-conversation';
+import { LoadConversation$Params } from '../fn/user/load-conversation';
 import { PageResponseFriendRequestRespDto } from '../models/page-response-friend-request-resp-dto';
+import { PageResponseMessageDto } from '../models/page-response-message-dto';
 import { PageResponseUserRespDto } from '../models/page-response-user-resp-dto';
 import { refuseRequest } from '../fn/user/refuse-request';
 import { RefuseRequest$Params } from '../fn/user/refuse-request';
@@ -29,6 +34,7 @@ import { sendMessage } from '../fn/user/send-message';
 import { SendMessage$Params } from '../fn/user/send-message';
 import { unfriendUser } from '../fn/user/unfriend-user';
 import { UnfriendUser$Params } from '../fn/user/unfriend-user';
+import { UserRespDto } from '../models/user-resp-dto';
 
 @Injectable({ providedIn: 'root' })
 export class UserService extends BaseService {
@@ -161,6 +167,31 @@ export class UserService extends BaseService {
     );
   }
 
+  /** Path part for operation `getSpecificUser()` */
+  static readonly GetSpecificUserPath = '/users/{user-id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getSpecificUser()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getSpecificUser$Response(params: GetSpecificUser$Params, context?: HttpContext): Observable<StrictHttpResponse<UserRespDto>> {
+    return getSpecificUser(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getSpecificUser$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getSpecificUser(params: GetSpecificUser$Params, context?: HttpContext): Observable<UserRespDto> {
+    return this.getSpecificUser$Response(params, context).pipe(
+      map((r: StrictHttpResponse<UserRespDto>): UserRespDto => r.body)
+    );
+  }
+
   /** Path part for operation `getAllReceivedRequests()` */
   static readonly GetAllReceivedRequestsPath = '/users/reqs';
 
@@ -208,6 +239,31 @@ export class UserService extends BaseService {
   fetchAllThisUserFriends(params?: FetchAllThisUserFriends$Params, context?: HttpContext): Observable<PageResponseUserRespDto> {
     return this.fetchAllThisUserFriends$Response(params, context).pipe(
       map((r: StrictHttpResponse<PageResponseUserRespDto>): PageResponseUserRespDto => r.body)
+    );
+  }
+
+  /** Path part for operation `loadConversation()` */
+  static readonly LoadConversationPath = '/users/conversations/{user-id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `loadConversation()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  loadConversation$Response(params: LoadConversation$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseMessageDto>> {
+    return loadConversation(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `loadConversation$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  loadConversation(params: LoadConversation$Params, context?: HttpContext): Observable<PageResponseMessageDto> {
+    return this.loadConversation$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PageResponseMessageDto>): PageResponseMessageDto => r.body)
     );
   }
 

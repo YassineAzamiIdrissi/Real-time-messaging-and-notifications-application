@@ -21,6 +21,14 @@ public class UserMapper {
 
     public UserRespDto userToUserRespDto
             (User user, User connected) {
+        if (connected == null) {
+            return UserRespDto.builder().
+                    id(user.getId()).
+                    firstname(user.getFirstName()).
+                    lastname(user.getLastName()).
+                    joined(user.getCreatedAt()).
+                    build();
+        }
         return UserRespDto.builder().
                 id(user.getId()).
                 firstname(user.getFirstName()).

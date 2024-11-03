@@ -118,5 +118,13 @@ public class UserController {
                 body(userService.
                         loadConversation(userId, page, size, authentication));
     }
+
+    @GetMapping("{user-id}")
+    ResponseEntity<UserRespDto> getSpecificUser(
+            @PathVariable("user-id") Integer userId
+    ) {
+        return ResponseEntity.ok().
+                body(userService.getSpecificUser(userId));
+    }
 }
 

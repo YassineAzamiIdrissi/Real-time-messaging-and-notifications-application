@@ -290,4 +290,13 @@ public class UserService {
                 conversation.getSize()
         );
     }
+
+    public UserRespDto getSpecificUser(Integer userId) {
+        return userRepo.findById(userId).
+                map((user) -> userMapper.userToUserRespDto(user, null)).
+                orElseThrow(
+                        () -> new AppUserNotFoundException
+                                ("User with id : " + userId + " isn't found")
+                );
+    }
 }

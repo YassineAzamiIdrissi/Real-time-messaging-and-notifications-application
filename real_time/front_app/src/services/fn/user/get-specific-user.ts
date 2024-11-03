@@ -8,18 +8,16 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { MessageDto } from '../../models/message-dto';
+import { UserRespDto } from '../../models/user-resp-dto';
 
-export interface SendMessage$Params {
-  userId: number;
-      body: MessageDto
+export interface GetSpecificUser$Params {
+  'user-id': number;
 }
 
-export function sendMessage(http: HttpClient, rootUrl: string, params: SendMessage$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
-  const rb = new RequestBuilder(rootUrl, sendMessage.PATH, 'post');
+export function getSpecificUser(http: HttpClient, rootUrl: string, params: GetSpecificUser$Params, context?: HttpContext): Observable<StrictHttpResponse<UserRespDto>> {
+  const rb = new RequestBuilder(rootUrl, getSpecificUser.PATH, 'get');
   if (params) {
-    rb.path('userId', params.userId, {});
-    rb.body(params.body, 'application/json');
+    rb.path('user-id', params['user-id'], {});
   }
 
   return http.request(
@@ -27,9 +25,9 @@ export function sendMessage(http: HttpClient, rootUrl: string, params: SendMessa
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: parseFloat(String((r as HttpResponse<any>).body)) }) as StrictHttpResponse<number>;
+      return r as StrictHttpResponse<UserRespDto>;
     })
   );
 }
 
-sendMessage.PATH = '/users/messages/{userId}';
+getSpecificUser.PATH = '/users/{user-id}';

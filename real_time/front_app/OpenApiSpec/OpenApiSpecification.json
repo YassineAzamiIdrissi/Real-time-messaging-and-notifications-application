@@ -371,6 +371,37 @@
         }
       }
     },
+    "/users/{user-id}": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "operationId": "getSpecificUser",
+        "parameters": [
+          {
+            "name": "user-id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserRespDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/users/reqs": {
       "get": {
         "tags": [
@@ -448,6 +479,57 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/PageResponseUserRespDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/conversations/{user-id}": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "operationId": "loadConversation",
+        "parameters": [
+          {
+            "name": "user-id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 5
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResponseMessageDto"
                 }
               }
             }
@@ -685,6 +767,39 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/FriendRequestRespDto"
+            }
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PageResponseMessageDto": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MessageDto"
             }
           },
           "totalElements": {
