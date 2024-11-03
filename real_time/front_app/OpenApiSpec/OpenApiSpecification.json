@@ -31,6 +31,48 @@
     }
   ],
   "paths": {
+    "/users/messages/{userId}": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "operationId": "sendMessage",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MessageDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/users/add/{userId}": {
       "post": {
         "tags": [
@@ -477,6 +519,22 @@
   },
   "components": {
     "schemas": {
+      "MessageDto": {
+        "type": "object",
+        "properties": {
+          "senderId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "receiverId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "string"
+          }
+        }
+      },
       "RegistrationRequest": {
         "required": [
           "email",

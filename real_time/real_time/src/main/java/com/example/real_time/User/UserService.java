@@ -255,4 +255,39 @@ public class UserService {
         msgService.sendMessage(message.getReceiverId(), message);
         return saved.getId();
     }
+
+
+    public PageResponse<MessageDto> loadConversation(
+            Integer userId,
+            int page,
+            int size,
+            Authentication authentication) {
+        User concernedUser = userRepo.findById(userId).
+                orElseThrow(() -> new AppUserNotFoundException
+                        ("User with id " + userId + " is not found !"));
+        User connectedUser = (User) authentication.getPrincipal();
+        Pageable pageable = PageRequest.of(
+                page,
+                size,
+                Sort.by("createdAt").descending()
+        );
+        Page<Message> conversation =
+                msgRepo.loadConversationBetweenUsers(
+                        pageable,
+                        connectedUser.getId(),
+                        concernedUser.getId()
+                );
+        List<MessageDto> content = conversation.stream().map(
+                userMapper::msgToMessageDto
+        ).toList();
+        return new PageResponse<>(
+                conversation.isFirst(),
+                conversation.isLast(),
+                content,
+                conversation.getTotalElements(),
+                conversation.getTotalPages(),
+                conversation.getNumber(),
+                conversation.getSize()
+        );
+    }
 }

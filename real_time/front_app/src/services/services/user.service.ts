@@ -25,6 +25,8 @@ import { PageResponseFriendRequestRespDto } from '../models/page-response-friend
 import { PageResponseUserRespDto } from '../models/page-response-user-resp-dto';
 import { refuseRequest } from '../fn/user/refuse-request';
 import { RefuseRequest$Params } from '../fn/user/refuse-request';
+import { sendMessage } from '../fn/user/send-message';
+import { SendMessage$Params } from '../fn/user/send-message';
 import { unfriendUser } from '../fn/user/unfriend-user';
 import { UnfriendUser$Params } from '../fn/user/unfriend-user';
 
@@ -32,6 +34,31 @@ import { UnfriendUser$Params } from '../fn/user/unfriend-user';
 export class UserService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
+  }
+
+  /** Path part for operation `sendMessage()` */
+  static readonly SendMessagePath = '/users/messages/{userId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `sendMessage()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  sendMessage$Response(params: SendMessage$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return sendMessage(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `sendMessage$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  sendMessage(params: SendMessage$Params, context?: HttpContext): Observable<number> {
+    return this.sendMessage$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
   }
 
   /** Path part for operation `addUser()` */

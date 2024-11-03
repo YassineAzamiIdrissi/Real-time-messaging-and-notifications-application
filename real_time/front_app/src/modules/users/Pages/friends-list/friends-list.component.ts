@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {UserService} from "../../../../services/services/user.service";
 import {ToastrService} from "ngx-toastr";
 import {UserRespDto} from "../../../../services/models/user-resp-dto";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-friends-list',
@@ -18,7 +19,8 @@ export class FriendsListComponent implements OnInit {
   totalPages: number = 0;
 
   constructor(private userService: UserService,
-              private toasterService: ToastrService) {
+              private toasterService: ToastrService,
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -87,5 +89,9 @@ export class FriendsListComponent implements OnInit {
   goToFirstPage() {
     this.page = 0;
     this.fetchAllUserFriends();
+  }
+
+  goToMessages(userId: number | undefined) {
+    this.router.navigate(["/users/spec-messages", userId]);
   }
 }

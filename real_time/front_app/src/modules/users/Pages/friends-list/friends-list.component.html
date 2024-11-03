@@ -17,6 +17,7 @@
       <td>{{ friend.joined }}</td>
       <td class="d-flex align-items-center gap-2">
         <button class="btn btn-success"
+                (click)="goToMessages(friend.id)"
         >Message
         </button>
         <button class="btn btn-danger"

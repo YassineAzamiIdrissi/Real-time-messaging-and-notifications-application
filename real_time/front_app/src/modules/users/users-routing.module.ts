@@ -29,7 +29,7 @@ const routes: Routes = [
         canActivate: [authGuard]
       },
       {
-        path: "spec-messages",
+        path: "spec-messages/:userId",
         component: ConversationComponent,
         canActivate: [authGuard]
       }
