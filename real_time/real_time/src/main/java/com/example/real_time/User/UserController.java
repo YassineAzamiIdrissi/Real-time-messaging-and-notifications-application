@@ -147,5 +147,14 @@ public class UserController {
         return ResponseEntity.ok().
                 build();
     }
+
+    @PostMapping("groups")
+    ResponseEntity<Integer> createGroup(@RequestParam(name = "groupName") String groupName,
+                                        Authentication authentication) {
+        return ResponseEntity.ok().
+                body(userService.createGroup(
+                        groupName, authentication
+                ));
+    }
 }
 

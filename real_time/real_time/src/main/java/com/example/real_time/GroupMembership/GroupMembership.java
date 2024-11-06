@@ -1,4 +1,4 @@
-package com.example.real_time.UserGroups;
+package com.example.real_time.GroupMembership;
 
 import com.example.real_time.Group.Group;
 import com.example.real_time.User.User;
@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @Entity
 @Builder
 @EntityListeners(AuditingEntityListener.class)
-public class UserGroups {
+public class GroupMembership {
     @Id
     @GeneratedValue
     private Integer id;
@@ -39,4 +39,5 @@ public class UserGroups {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User member;
+    private GroupMemberStatus status;
 }

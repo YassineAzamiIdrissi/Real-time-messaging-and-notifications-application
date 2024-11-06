@@ -6,13 +6,17 @@ import com.example.real_time.CustomExceptions.InvalidOperationException;
 import com.example.real_time.FriendRequest.FriendRequest;
 import com.example.real_time.FriendRequest.FriendRequestRepository;
 import com.example.real_time.FriendRequest.FriendRequestRespDto;
+import com.example.real_time.Group.Group;
+import com.example.real_time.Group.GroupRepository;
+import com.example.real_time.GroupMembership.GroupMemberShipRepository;
+import com.example.real_time.GroupMembership.GroupMemberStatus;
+import com.example.real_time.GroupMembership.GroupMembership;
 import com.example.real_time.Message.Message;
 import com.example.real_time.Message.MessageDto;
 import com.example.real_time.Message.MessageRepository;
 import com.example.real_time.Message.MessageService;
 import com.example.real_time.Notification.Notification;
 import com.example.real_time.Notification.NotificationService;
-import com.example.real_time.Notification.NotificationType;
 import com.example.real_time.Pagination.PageResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +31,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
+import static com.example.real_time.GroupMembership.GroupMemberStatus.ADMIN;
 import static com.example.real_time.Notification.NotificationType.*;
 
 @Service
@@ -37,7 +42,8 @@ public class UserService {
     private final UserRepository userRepo;
     private final FriendRequestRepository reqRepo;
     private final MessageRepository msgRepo;
-
+    private final GroupRepository groupRepo;
+    private final GroupMemberShipRepository memberShipRepo;
     private final UserMapper userMapper;
 
     private final NotificationService notificationService;
@@ -343,5 +349,29 @@ public class UserService {
                 connectedUser.getId(),
                 concernedUser.getId()
         );
+    }
+
+    public Integer createGroup(String groupName, Authentication authentication) {
+        User connected = (User) authentication.getPrincipal();
+        Group group = Group.builder().name(groupName).
+                grpCreator(connected).
+                build();
+        boolean isGroupAlreadyExists = groupRepo.isGroupAlreadyExists(
+                connected.getId(), groupName
+        );
+        if (groupName == null || groupName.isEmpty()) {
+            throw new InvalidOperationException("Group name has to be specified !");
+        }
+        if (isGroupAlreadyExists) {
+            throw new InvalidOperationException("Group already exists !");
+        }
+        var savedGroup = groupRepo.save(group);
+        GroupMembership membership = GroupMembership.builder().
+                group(savedGroup).
+                member(connected).
+                status(ADMIN).
+                build();
+        memberShipRepo.save(membership);
+        return savedGroup.getId();
     }
 }

@@ -7,7 +7,7 @@ import com.example.real_time.Group.Group;
 import com.example.real_time.GroupMessage.GroupMessage;
 import com.example.real_time.Message.Message;
 import com.example.real_time.RecoveryCode.RecoveryCode;
-import com.example.real_time.UserGroups.UserGroups;
+import com.example.real_time.GroupMembership.GroupMembership;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -86,7 +86,10 @@ public class User implements Principal, UserDetails {
     private List<GroupMessage> sentGrpMessages;
 
     @OneToMany(mappedBy = "member")
-    private List<UserGroups> userGroups;
+    private List<GroupMembership> userGroups;
+
+    @OneToMany(mappedBy = "grpCreator")
+    private List<Group> createdGroups;
 
     @Override
     public String getName() {

@@ -1,8 +1,8 @@
 package com.example.real_time.Group;
 
 import com.example.real_time.GroupMessage.GroupMessage;
+import com.example.real_time.GroupMembership.GroupMembership;
 import com.example.real_time.User.User;
-import com.example.real_time.UserGroups.UserGroups;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,8 +14,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
-import static jakarta.persistence.FetchType.EAGER;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -40,8 +38,12 @@ public class Group {
 
 
     @OneToMany(mappedBy = "group")
-    private List<UserGroups> groups;
-    
+    private List<GroupMembership> groups;
+
+
+    @ManyToOne
+    @JoinColumn(name = "grp_creator_id")
+    private User grpCreator;
 
     @OneToMany(mappedBy = "group")
     private List<GroupMessage> messages;
