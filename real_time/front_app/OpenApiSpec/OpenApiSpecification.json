@@ -73,6 +73,37 @@
         }
       }
     },
+    "/users/groups": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "operationId": "createGroup",
+        "parameters": [
+          {
+            "name": "groupName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/users/add/{userId}": {
       "post": {
         "tags": [

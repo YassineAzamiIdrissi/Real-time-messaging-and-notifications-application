@@ -7,6 +7,7 @@ import {FriendsListComponent} from "./Pages/friends-list/friends-list.component"
 import {RequestsListComponent} from "./Pages/requests-list/requests-list.component";
 import {ConversationComponent} from "./Pages/conversation/conversation.component";
 import {DiscussionsComponent} from "./Pages/discussions/discussions.component";
+import {GroupsListComponent} from "./Pages/groups-list/groups-list.component";
 
 const routes: Routes = [
   {
@@ -38,7 +39,12 @@ const routes: Routes = [
         path: "discussions",
         component: DiscussionsComponent,
         canActivate: [authGuard]
-      }
+      },
+      {
+        path: "groups",
+        component: GroupsListComponent,
+        canActivate: [authGuard]
+      },
     ]
   }
 ];

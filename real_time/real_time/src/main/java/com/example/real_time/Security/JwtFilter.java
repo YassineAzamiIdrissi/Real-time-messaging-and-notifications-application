@@ -30,7 +30,6 @@ public class JwtFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        System.out.println("AAAA");
         final String authorization = request.getHeader("Authorization");
         final String accessToken;
         final String userEmail;

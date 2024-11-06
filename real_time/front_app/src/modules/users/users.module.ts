@@ -12,6 +12,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { DiscussionsComponent } from './Pages/discussions/discussions.component';
 import { DiscussionCardComponent } from './Components/discussion-card/discussion-card.component';
 import { FilterPipe } from './Pages/conversation/filter.pipe';
+import { GroupsListComponent } from './Pages/groups-list/groups-list.component';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { FilterPipe } from './Pages/conversation/filter.pipe';
     ConversationComponent,
     DiscussionsComponent,
     DiscussionCardComponent,
-    FilterPipe
+    FilterPipe,
+    GroupsListComponent
   ],
     imports: [
         CommonModule,

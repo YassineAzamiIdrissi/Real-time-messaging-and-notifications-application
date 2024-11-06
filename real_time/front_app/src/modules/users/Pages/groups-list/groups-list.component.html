@@ -1,0 +1,58 @@
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary"
+        data-bs-toggle="modal" data-bs-target="#newGroup">
+  Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="newGroup" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Specify group name : </h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="grpName" class="form-label">Group name : </label>
+          <input type="text" class="form-control" id="grpName"
+                 [(ngModel)]="grpName"
+                 name="grpName"
+          >
+        </div>
+      </div>
+      <div class="modal-footer">
+        <!--
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+         -->
+        <button type="button" class="btn btn-primary"
+                (click)="createGroup()">Create group
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="groups-panel">
+  <div class="group-line">
+    <div class="left-side">
+      <div class="picture-container">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFei77t1O-6TTTENh63BsESAoRUaY8ttuxNw&s"/>
+      </div>
+      <button class="btn btn-link">
+        Some sort of group name...
+      </button>
+    </div>
+    <div class="right-side">
+      <div class="dropdown">
+        <a class="btn btn-danger dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+           aria-expanded="false">
+          Options
+        </a>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="javascript:void[0]">Delete group</a></li>
+          <li><a class="dropdown-item" href="javascript:void[0]">See group</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

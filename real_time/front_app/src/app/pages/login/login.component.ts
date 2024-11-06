@@ -24,6 +24,7 @@ export class LoginComponent {
   }
 
   login() {
+    console.log(this.authReq);
     this.errorMessages = [];
     this.simpErrorMessage = "";
     this.authService.authenticate(
