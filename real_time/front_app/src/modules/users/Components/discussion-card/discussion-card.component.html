@@ -1,0 +1,18 @@
+<div class="parent">
+  <div class="left-side">
+    <div class="pic-container">
+      <img [src]="image"/>
+    </div>
+    <div class="left-side-texts">
+      <h6 class="user-name">{{ username }}</h6>
+      <p class="last-message"
+         [style]="this.lastMessageText == 'Start a discussion now !' ?
+         'color:green':'color:gray; font-weight:bold'">{{
+          lastMessage
+        }}</p>
+    </div>
+  </div>
+  <div class="right-side">
+    <small class="last-message-date">{{ lastMessageDate }}</small>
+  </div>
+</div>

@@ -3,8 +3,11 @@ package com.example.real_time.User;
 import com.example.real_time.ActivationCode.ActivationCode;
 import com.example.real_time.Authority.Authority;
 import com.example.real_time.FriendRequest.FriendRequest;
+import com.example.real_time.Group.Group;
+import com.example.real_time.GroupMessage.GroupMessage;
 import com.example.real_time.Message.Message;
 import com.example.real_time.RecoveryCode.RecoveryCode;
+import com.example.real_time.UserGroups.UserGroups;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -75,9 +78,15 @@ public class User implements Principal, UserDetails {
 
     @OneToMany(mappedBy = "receiver", fetch = EAGER)
     private List<Message> receivedMessages;
-    
+
     @OneToMany(mappedBy = "user")
     private List<RecoveryCode> recoveryCodes;
+
+    @OneToMany(mappedBy = "sender")
+    private List<GroupMessage> sentGrpMessages;
+
+    @OneToMany(mappedBy = "member")
+    private List<UserGroups> userGroups;
 
     @Override
     public String getName() {

@@ -6,4 +6,5 @@ export interface MessageDto {
   content?: string;
   receiverId?: number;
   senderId?: number;
+  sentAt?: string;
 }

@@ -1,0 +1,27 @@
+<div class="d-flex align-items-center gap-2 main-layout">
+  <div class="discussion-cards">
+    <div class="form-outline mt-3">
+      <input type="text" class="form-control" id="email"
+             placeholder="Search a conversation"
+             [(ngModel)]="searchText"
+             name="text"
+      >
+    </div>
+    <app-discussion-card *ngFor="let friendCard of content | filter:searchText"
+                         [username]="friendCard.firstname + ' ' + friendCard.lastname"
+                         [image]="randImgUrl"
+                         [userId]="friendCard.id"
+                         [lastMessage]="friendCard.id == lastSentMessageObject.receiverId ?
+                         lastSentMessageObject:null"
+                         [lastMessage2]="friendCard.id == lastSentMessageObject2.receiverId ?
+                         lastSentMessageObject2: null"
+                         (click)="switchId(friendCard.id)">
+    </app-discussion-card>
+  </div>
+  <div class="messages-content">
+    <app-conversation *ngIf="id >= 1" [toId]="id"
+                      (messageEmitter)="updateLastSentMessage($event)"
+                      (receivedMessageEmitter)="updateLastReceivedMessage($event)"
+    ></app-conversation>
+  </div>
+</div>

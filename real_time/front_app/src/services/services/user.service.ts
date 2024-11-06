@@ -15,16 +15,21 @@ import { acceptRequest } from '../fn/user/accept-request';
 import { AcceptRequest$Params } from '../fn/user/accept-request';
 import { addUser } from '../fn/user/add-user';
 import { AddUser$Params } from '../fn/user/add-user';
+import { deleteConversation } from '../fn/user/delete-conversation';
+import { DeleteConversation$Params } from '../fn/user/delete-conversation';
 import { fetchAllThisUserFriends } from '../fn/user/fetch-all-this-user-friends';
 import { FetchAllThisUserFriends$Params } from '../fn/user/fetch-all-this-user-friends';
 import { getAllReceivedRequests } from '../fn/user/get-all-received-requests';
 import { GetAllReceivedRequests$Params } from '../fn/user/get-all-received-requests';
 import { getAllTimeLineUsers } from '../fn/user/get-all-time-line-users';
 import { GetAllTimeLineUsers$Params } from '../fn/user/get-all-time-line-users';
+import { getLastMessage } from '../fn/user/get-last-message';
+import { GetLastMessage$Params } from '../fn/user/get-last-message';
 import { getSpecificUser } from '../fn/user/get-specific-user';
 import { GetSpecificUser$Params } from '../fn/user/get-specific-user';
 import { loadConversation } from '../fn/user/load-conversation';
 import { LoadConversation$Params } from '../fn/user/load-conversation';
+import { MessageDto } from '../models/message-dto';
 import { PageResponseFriendRequestRespDto } from '../models/page-response-friend-request-resp-dto';
 import { PageResponseMessageDto } from '../models/page-response-message-dto';
 import { PageResponseUserRespDto } from '../models/page-response-user-resp-dto';
@@ -217,6 +222,31 @@ export class UserService extends BaseService {
     );
   }
 
+  /** Path part for operation `getLastMessage()` */
+  static readonly GetLastMessagePath = '/users/last-message/{user-id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getLastMessage()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getLastMessage$Response(params: GetLastMessage$Params, context?: HttpContext): Observable<StrictHttpResponse<MessageDto>> {
+    return getLastMessage(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getLastMessage$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getLastMessage(params: GetLastMessage$Params, context?: HttpContext): Observable<MessageDto> {
+    return this.getLastMessage$Response(params, context).pipe(
+      map((r: StrictHttpResponse<MessageDto>): MessageDto => r.body)
+    );
+  }
+
   /** Path part for operation `fetchAllThisUserFriends()` */
   static readonly FetchAllThisUserFriendsPath = '/users/friends';
 
@@ -264,6 +294,35 @@ export class UserService extends BaseService {
   loadConversation(params: LoadConversation$Params, context?: HttpContext): Observable<PageResponseMessageDto> {
     return this.loadConversation$Response(params, context).pipe(
       map((r: StrictHttpResponse<PageResponseMessageDto>): PageResponseMessageDto => r.body)
+    );
+  }
+
+  /** Path part for operation `deleteConversation()` */
+  static readonly DeleteConversationPath = '/users/conversations/{user-id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteConversation()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteConversation$Response(params: DeleteConversation$Params, context?: HttpContext): Observable<StrictHttpResponse<{
+}>> {
+    return deleteConversation(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `deleteConversation$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteConversation(params: DeleteConversation$Params, context?: HttpContext): Observable<{
+}> {
+    return this.deleteConversation$Response(params, context).pipe(
+      map((r: StrictHttpResponse<{
+}>): {
+} => r.body)
     );
   }
 

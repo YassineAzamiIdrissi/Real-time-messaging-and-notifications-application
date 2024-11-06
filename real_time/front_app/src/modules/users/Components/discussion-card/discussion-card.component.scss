@@ -1,0 +1,48 @@
+.parent {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: 1s;
+  border-radius: 20px;
+  padding: 15px;
+}
+
+.parent:hover {
+  background-color: lightgray;
+}
+
+.left-side {
+  flex-basis: 85%;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.left-side-texts {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.left-side-texts > h6, .left-side-texts > p {
+  margin: 0;
+  padding: 0;
+}
+
+.pic-container {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  overflow: clip;
+}
+
+.pic-container > img {
+  width: 100%;
+  height: 100%;
+}
+
+.last-message-date {
+  white-space: nowrap;
+  display: block;
+  margin-right: 20px;
+}

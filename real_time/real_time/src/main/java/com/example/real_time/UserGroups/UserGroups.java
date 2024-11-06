@@ -1,5 +1,6 @@
-package com.example.real_time.Message;
+package com.example.real_time.UserGroups;
 
+import com.example.real_time.Group.Group;
 import com.example.real_time.User.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,14 +16,13 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Entity
 @Builder
 @EntityListeners(AuditingEntityListener.class)
-@Entity
-public class Message {
+public class UserGroups {
     @Id
     @GeneratedValue
     private Integer id;
-
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
@@ -31,14 +31,12 @@ public class Message {
     @LastModifiedDate
     @Column(insertable = false)
     private LocalDateTime updatedAt;
-    
-    @ManyToOne
-    @JoinColumn(name = "sender_id")
-    private User sender;
 
     @ManyToOne
-    @JoinColumn(name = "receiver_id")
-    private User receiver;
+    @JoinColumn(name = "group_id")
+    private Group group;
 
-    private String content;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User member;
 }

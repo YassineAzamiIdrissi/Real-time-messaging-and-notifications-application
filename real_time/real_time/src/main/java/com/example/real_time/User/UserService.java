@@ -14,6 +14,7 @@ import com.example.real_time.Notification.Notification;
 import com.example.real_time.Notification.NotificationService;
 import com.example.real_time.Notification.NotificationType;
 import com.example.real_time.Pagination.PageResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,6 +31,7 @@ import static com.example.real_time.Notification.NotificationType.*;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class UserService {
 
     private final UserRepository userRepo;
@@ -269,7 +271,7 @@ public class UserService {
         Pageable pageable = PageRequest.of(
                 page,
                 size,
-                Sort.by("createdAt").descending()
+                Sort.by("createdAt").ascending()
         );
         Page<Message> conversation =
                 msgRepo.loadConversationBetweenUsers(
@@ -298,5 +300,48 @@ public class UserService {
                         () -> new AppUserNotFoundException
                                 ("User with id : " + userId + " isn't found")
                 );
+    }
+
+    public MessageDto getLastMessageOfConversation(Integer userId,
+                                                   Authentication authentication) {
+        User concernedUser = userRepo.findById(userId).
+                orElseThrow(() -> new AppUserNotFoundException
+                        ("User with id " + userId + " not found"));
+        User connectedUser = (User) authentication.getPrincipal();
+        List<Message> messages = msgRepo.getLastMessageOfDiscussion(
+                connectedUser.getId(),
+                concernedUser.getId()
+        );
+        MessageDto dto = new MessageDto();
+        String content;
+        if (messages.isEmpty()) {
+            content = "";
+            dto.setSenderId(0);
+            dto.setReceiverId(0);
+        } else {
+            content = messages.get(0).getContent();
+            dto.setSenderId(messages.get(0).getSender().getId());
+            dto.setReceiverId(messages.get(0).getReceiver().getId());
+            dto.setSentAt(messages.get(0).getCreatedAt());
+        }
+        dto.setContent(content);
+        return dto;
+    }
+
+    public void deleteConversation(
+            Integer userId,
+            Authentication authentication
+    ) {
+        User concernedUser = userRepo.findById(
+                userId).orElseThrow(
+                () -> new
+                        AppUserNotFoundException
+                        ("User with id " + userId + " isn't found")
+        );
+        User connectedUser = (User) authentication.getPrincipal();
+        msgRepo.deleteAllBySenderIdAndReceiverId(
+                connectedUser.getId(),
+                concernedUser.getId()
+        );
     }
 }

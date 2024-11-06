@@ -1,6 +1,8 @@
-package com.example.real_time.Message;
+package com.example.real_time.Group;
 
+import com.example.real_time.GroupMessage.GroupMessage;
 import com.example.real_time.User.User;
+import com.example.real_time.UserGroups.UserGroups;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,18 +13,22 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
+import static jakarta.persistence.FetchType.EAGER;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder
-@EntityListeners(AuditingEntityListener.class)
 @Entity
-public class Message {
+@EntityListeners(AuditingEntityListener.class)
+@Table(name = "_group")
+public class Group {
     @Id
     @GeneratedValue
     private Integer id;
-
+    private String name;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
@@ -31,14 +37,12 @@ public class Message {
     @LastModifiedDate
     @Column(insertable = false)
     private LocalDateTime updatedAt;
+
+
+    @OneToMany(mappedBy = "group")
+    private List<UserGroups> groups;
     
-    @ManyToOne
-    @JoinColumn(name = "sender_id")
-    private User sender;
 
-    @ManyToOne
-    @JoinColumn(name = "receiver_id")
-    private User receiver;
-
-    private String content;
+    @OneToMany(mappedBy = "group")
+    private List<GroupMessage> messages;
 }

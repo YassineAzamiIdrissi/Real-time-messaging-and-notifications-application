@@ -1,7 +1,6 @@
 package com.example.real_time.User;
 
 import com.example.real_time.FriendRequest.FriendRequestRespDto;
-import com.example.real_time.Message.Message;
 import com.example.real_time.Message.MessageDto;
 import com.example.real_time.Pagination.PageResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -125,6 +124,28 @@ public class UserController {
     ) {
         return ResponseEntity.ok().
                 body(userService.getSpecificUser(userId));
+    }
+
+    @GetMapping("last-message/{user-id}")
+    ResponseEntity<MessageDto> getLastMessage(
+            @PathVariable("user-id") Integer userId,
+            Authentication authentication
+    ) {
+        return ResponseEntity.ok().
+                body(userService.getLastMessageOfConversation(
+                        userId,
+                        authentication
+                ));
+    }
+
+    @DeleteMapping("conversations/{user-id}")
+    public ResponseEntity<?> deleteConversation(
+            @PathVariable("user-id") Integer userId,
+            Authentication authentication
+    ) {
+        userService.deleteConversation(userId, authentication);
+        return ResponseEntity.ok().
+                build();
     }
 }
 

@@ -86,6 +86,7 @@ public class UserMapper {
                 senderId(msg.getSender().getId()).
                 receiverId(msg.getReceiver().getId()).
                 content(msg.getContent()).
+                sentAt(msg.getCreatedAt()).
                 build();
     }
 }

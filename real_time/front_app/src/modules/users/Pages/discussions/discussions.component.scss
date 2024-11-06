@@ -1,0 +1,27 @@
+.main-layout {
+  height: 84vh;
+}
+
+.discussion-cards {
+  padding: 1rem;
+  flex-basis: 35%;
+  height: 100%;
+  overflow-y: auto;
+  border: solid 1px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.messages-content {
+  flex-basis: 60%;
+  height: 100%;
+  overflow-y: auto;
+  border: solid 1px;
+  padding: 1rem;
+}
+
+
+.custom-search-navbar {
+  background-color: gray;
+}

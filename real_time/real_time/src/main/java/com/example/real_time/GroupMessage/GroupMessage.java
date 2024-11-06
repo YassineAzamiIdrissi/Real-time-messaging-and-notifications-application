@@ -1,5 +1,6 @@
-package com.example.real_time.Message;
+package com.example.real_time.GroupMessage;
 
+import com.example.real_time.Group.Group;
 import com.example.real_time.User.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,33 +13,35 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
+import static jakarta.persistence.FetchType.EAGER;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder
 @EntityListeners(AuditingEntityListener.class)
 @Entity
-public class Message {
+public class GroupMessage {
     @Id
     @GeneratedValue
     private Integer id;
 
-
     @CreatedDate
     @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private LocalDateTime createdDate;
 
     @LastModifiedDate
     @Column(insertable = false)
     private LocalDateTime updatedAt;
-    
-    @ManyToOne
+
+    @ManyToOne(fetch = EAGER)
+    @JoinColumn(name = "group_id")
+    private Group group;
+
+
+    @ManyToOne(fetch = EAGER)
     @JoinColumn(name = "sender_id")
     private User sender;
-
-    @ManyToOne
-    @JoinColumn(name = "receiver_id")
-    private User receiver;
 
     private String content;
 }

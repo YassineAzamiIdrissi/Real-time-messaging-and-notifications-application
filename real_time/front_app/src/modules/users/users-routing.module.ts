@@ -6,6 +6,7 @@ import {authGuard} from "../../AuthGuard/auth.guard";
 import {FriendsListComponent} from "./Pages/friends-list/friends-list.component";
 import {RequestsListComponent} from "./Pages/requests-list/requests-list.component";
 import {ConversationComponent} from "./Pages/conversation/conversation.component";
+import {DiscussionsComponent} from "./Pages/discussions/discussions.component";
 
 const routes: Routes = [
   {
@@ -31,6 +32,11 @@ const routes: Routes = [
       {
         path: "spec-messages/:userId",
         component: ConversationComponent,
+        canActivate: [authGuard]
+      },
+      {
+        path: "discussions",
+        component: DiscussionsComponent,
         canActivate: [authGuard]
       }
     ]

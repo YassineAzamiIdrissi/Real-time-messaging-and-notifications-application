@@ -31,8 +31,9 @@
 .message {
   width: fit-content;
   height: fit-content;
-  padding: 0.2rem 1.2rem 0.2rem 0.8rem;
+  padding: 0.2rem 5.7rem 0.2rem 0.8rem;
   max-width: 24rem;
+  position: relative;
 }
 
 .own-message {
@@ -53,3 +54,11 @@
   align-self: end;
 }
 
+.message-time {
+  color: #B8001F;
+  font-size: 10px;
+  font-weight: bold;
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0.2rem;
+}

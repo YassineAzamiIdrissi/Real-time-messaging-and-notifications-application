@@ -444,6 +444,37 @@
         }
       }
     },
+    "/users/last-message/{user-id}": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "operationId": "getLastMessage",
+        "parameters": [
+          {
+            "name": "user-id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/users/friends": {
       "get": {
         "tags": [
@@ -535,6 +566,35 @@
             }
           }
         }
+      },
+      "delete": {
+        "tags": [
+          "user"
+        ],
+        "operationId": "deleteConversation",
+        "parameters": [
+          {
+            "name": "user-id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/auth/activate-account": {
@@ -614,6 +674,10 @@
           },
           "content": {
             "type": "string"
+          },
+          "sentAt": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },
