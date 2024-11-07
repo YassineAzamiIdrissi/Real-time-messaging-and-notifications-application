@@ -14,6 +14,7 @@ import { DiscussionCardComponent } from './Components/discussion-card/discussion
 import { FilterPipe } from './Pages/conversation/filter.pipe';
 import { GroupsListComponent } from './Pages/groups-list/groups-list.component';
 import { GroupDetailsComponent } from './Pages/group-details/group-details.component';
+import { GroupChatComponent } from './Pages/group-chat/group-chat.component';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import { GroupDetailsComponent } from './Pages/group-details/group-details.compo
     DiscussionCardComponent,
     FilterPipe,
     GroupsListComponent,
-    GroupDetailsComponent
+    GroupDetailsComponent,
+    GroupChatComponent
   ],
     imports: [
         CommonModule,

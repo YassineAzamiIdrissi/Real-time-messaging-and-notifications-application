@@ -13,6 +13,8 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { acceptRequest } from '../fn/user/accept-request';
 import { AcceptRequest$Params } from '../fn/user/accept-request';
+import { addGroupMember } from '../fn/user/add-group-member';
+import { AddGroupMember$Params } from '../fn/user/add-group-member';
 import { addUser } from '../fn/user/add-user';
 import { AddUser$Params } from '../fn/user/add-user';
 import { createGroup } from '../fn/user/create-group';
@@ -104,6 +106,56 @@ export class UserService extends BaseService {
    */
   createGroup(params: CreateGroup$Params, context?: HttpContext): Observable<number> {
     return this.createGroup$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `getGroupMembers()` */
+  static readonly GetGroupMembersPath = '/users/group/members/{groupId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getGroupMembers()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getGroupMembers$Response(params: GetGroupMembers$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseGroupMemberRespDto>> {
+    return getGroupMembers(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getGroupMembers$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getGroupMembers(params: GetGroupMembers$Params, context?: HttpContext): Observable<PageResponseGroupMemberRespDto> {
+    return this.getGroupMembers$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PageResponseGroupMemberRespDto>): PageResponseGroupMemberRespDto => r.body)
+    );
+  }
+
+  /** Path part for operation `addGroupMember()` */
+  static readonly AddGroupMemberPath = '/users/group/members/{groupId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `addGroupMember()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  addGroupMember$Response(params: AddGroupMember$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return addGroupMember(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `addGroupMember$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  addGroupMember(params: AddGroupMember$Params, context?: HttpContext): Observable<number> {
+    return this.addGroupMember$Response(params, context).pipe(
       map((r: StrictHttpResponse<number>): number => r.body)
     );
   }
@@ -330,31 +382,6 @@ export class UserService extends BaseService {
   realAllConnectedUserGroups(params?: RealAllConnectedUserGroups$Params, context?: HttpContext): Observable<PageResponseGroupRespDto> {
     return this.realAllConnectedUserGroups$Response(params, context).pipe(
       map((r: StrictHttpResponse<PageResponseGroupRespDto>): PageResponseGroupRespDto => r.body)
-    );
-  }
-
-  /** Path part for operation `getGroupMembers()` */
-  static readonly GetGroupMembersPath = '/users/group/members/{groupId}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getGroupMembers()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getGroupMembers$Response(params: GetGroupMembers$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseGroupMemberRespDto>> {
-    return getGroupMembers(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getGroupMembers$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getGroupMembers(params: GetGroupMembers$Params, context?: HttpContext): Observable<PageResponseGroupMemberRespDto> {
-    return this.getGroupMembers$Response(params, context).pipe(
-      map((r: StrictHttpResponse<PageResponseGroupMemberRespDto>): PageResponseGroupMemberRespDto => r.body)
     );
   }
 

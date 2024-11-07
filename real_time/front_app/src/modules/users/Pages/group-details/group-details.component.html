@@ -9,6 +9,13 @@
   </div>
   <div class="members">
     <h4>Group members : </h4>
+    <button type="button" class="btn btn-primary"
+            data-bs-toggle="modal"
+            data-bs-target="#exampleModal"
+            *ngIf="isUserAdmin"
+    >
+      Add a new member
+    </button>
   </div>
 </div>
 <table class="table">
@@ -24,12 +31,48 @@
   <tbody>
   <tr *ngFor="let member of pageResp.content">
     <th scope="row">{{ member.id }}</th>
-    <td scope="row">{{ member.member }}</td>
+    <td scope="row">{{ member.member }}
+      &nbsp; &nbsp;
+      <span class="text text-success fw-bold" *ngIf="member.id == currentUserId">
+        (You)
+      </span></td>
     <td>{{ member.status }}</td>
     <td>{{ member.joinedAt | date }}</td>
     <td *ngIf="isUserAdmin">
-      <button class="btn btn-danger">Kick</button>
+      <button class="btn btn-danger" *ngIf="member.id != currentUserId">Kick</button>
     </td>
   </tr>
   </tbody>
 </table>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Invite friends</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="friends-cards-inset">
+          <div class="friend-card" *ngFor="let friend of content">
+            <div class="left-side">
+              <div class="picture-inset">
+                <img
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMg_4QMb_SkaPs0XXddwSldTXcgQCi2tdk0w&s"/>
+              </div>
+              <p class="fw-bold p-0 m-0">{{ friend.firstname + " " + friend.lastname }}</p>
+            </div>
+            <div class="right-side">
+              <button class="btn btn-success"
+                      (click)="addUserToGroup(friend.id)">Add
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>

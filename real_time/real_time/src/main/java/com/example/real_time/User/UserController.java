@@ -3,7 +3,6 @@ package com.example.real_time.User;
 import com.example.real_time.FriendRequest.FriendRequestRespDto;
 import com.example.real_time.Group.GroupMemberRespDto;
 import com.example.real_time.Group.GroupRespDto;
-import com.example.real_time.GroupMembership.GroupMemberStatus;
 import com.example.real_time.Message.MessageDto;
 import com.example.real_time.Pagination.PageResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -209,5 +208,6 @@ public class UserController {
                 body(userService.addFriendToCreatedGroup
                         (friendId, groupId, authentication));
     }
+
 }
 

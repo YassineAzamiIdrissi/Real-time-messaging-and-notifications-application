@@ -10,6 +10,10 @@ import com.example.real_time.Group.*;
 import com.example.real_time.GroupMembership.GroupMemberShipRepository;
 import com.example.real_time.GroupMembership.GroupMemberStatus;
 import com.example.real_time.GroupMembership.GroupMembership;
+import com.example.real_time.GroupMessage.GroupMessage;
+import com.example.real_time.GroupMessage.GroupMessageDto;
+import com.example.real_time.GroupMessage.GroupMessageRepository;
+import com.example.real_time.GroupMessage.GroupMessageService;
 import com.example.real_time.Message.Message;
 import com.example.real_time.Message.MessageDto;
 import com.example.real_time.Message.MessageRepository;
@@ -46,9 +50,10 @@ public class UserService {
     private final GroupMemberShipRepository memberShipRepo;
     private final UserMapper userMapper;
     private final GroupMapper groupMapper;
-
+    private final GroupMessageService groupMessageService;
     private final NotificationService notificationService;
     private final MessageService msgService;
+    private final GroupMessageRepository groupMessageRepo;
 
     public PageResponse<UserRespDto>
     getDisplayableUsers(int page, int size, Authentication authentication) {
@@ -480,6 +485,30 @@ public class UserService {
                 member(concernedUser).
                 status(MEMBER).
                 build();
-        return memberShipRepo.save(membership).getId();
+        var saved = memberShipRepo.save(membership);
+        Notification notif = Notification.builder().
+                type(ADDED_TO_GOURP).
+                content(concernedUser.fullName() + " added you to group " + concernedGroup.getName()).
+                build();
+
+        notificationService.sendNotification(notif, friendId);
+        return saved.getId();
+    }
+
+    public Integer sendGroupMessage(GroupMessageDto grpMessage,
+                                    Authentication authentication) {
+        User connected = (User) authentication.getPrincipal();
+        Group concernedGroup = groupRepo.findById(grpMessage.getGroupId()).orElseThrow(
+                () -> new InvalidOperationException
+                        ("Group with id " + grpMessage.getGroupId() + " isn't found")
+        );
+        GroupMessage groupMessage = GroupMessage.builder().
+                group(concernedGroup).
+                sender(connected).
+                content(grpMessage.getContent()).
+                build();
+        var saved = groupMessageRepo.save(groupMessage);
+        groupMessageService.publishMessage(concernedGroup.getId(), grpMessage);
+        return saved.getId();
     }
 }
