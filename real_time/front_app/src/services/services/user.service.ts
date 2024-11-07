@@ -25,14 +25,20 @@ import { getAllReceivedRequests } from '../fn/user/get-all-received-requests';
 import { GetAllReceivedRequests$Params } from '../fn/user/get-all-received-requests';
 import { getAllTimeLineUsers } from '../fn/user/get-all-time-line-users';
 import { GetAllTimeLineUsers$Params } from '../fn/user/get-all-time-line-users';
+import { getGroupMembers } from '../fn/user/get-group-members';
+import { GetGroupMembers$Params } from '../fn/user/get-group-members';
 import { getLastMessage } from '../fn/user/get-last-message';
 import { GetLastMessage$Params } from '../fn/user/get-last-message';
+import { getSpecGroup } from '../fn/user/get-spec-group';
+import { GetSpecGroup$Params } from '../fn/user/get-spec-group';
 import { getSpecificUser } from '../fn/user/get-specific-user';
 import { GetSpecificUser$Params } from '../fn/user/get-specific-user';
+import { GroupRespDto } from '../models/group-resp-dto';
 import { loadConversation } from '../fn/user/load-conversation';
 import { LoadConversation$Params } from '../fn/user/load-conversation';
 import { MessageDto } from '../models/message-dto';
 import { PageResponseFriendRequestRespDto } from '../models/page-response-friend-request-resp-dto';
+import { PageResponseGroupMemberRespDto } from '../models/page-response-group-member-resp-dto';
 import { PageResponseGroupRespDto } from '../models/page-response-group-resp-dto';
 import { PageResponseMessageDto } from '../models/page-response-message-dto';
 import { PageResponseUserRespDto } from '../models/page-response-user-resp-dto';
@@ -277,6 +283,31 @@ export class UserService extends BaseService {
     );
   }
 
+  /** Path part for operation `getSpecGroup()` */
+  static readonly GetSpecGroupPath = '/users/groups/{group-id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getSpecGroup()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getSpecGroup$Response(params: GetSpecGroup$Params, context?: HttpContext): Observable<StrictHttpResponse<GroupRespDto>> {
+    return getSpecGroup(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getSpecGroup$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getSpecGroup(params: GetSpecGroup$Params, context?: HttpContext): Observable<GroupRespDto> {
+    return this.getSpecGroup$Response(params, context).pipe(
+      map((r: StrictHttpResponse<GroupRespDto>): GroupRespDto => r.body)
+    );
+  }
+
   /** Path part for operation `realAllConnectedUserGroups()` */
   static readonly RealAllConnectedUserGroupsPath = '/users/groups/creator';
 
@@ -299,6 +330,31 @@ export class UserService extends BaseService {
   realAllConnectedUserGroups(params?: RealAllConnectedUserGroups$Params, context?: HttpContext): Observable<PageResponseGroupRespDto> {
     return this.realAllConnectedUserGroups$Response(params, context).pipe(
       map((r: StrictHttpResponse<PageResponseGroupRespDto>): PageResponseGroupRespDto => r.body)
+    );
+  }
+
+  /** Path part for operation `getGroupMembers()` */
+  static readonly GetGroupMembersPath = '/users/group/members/{groupId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getGroupMembers()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getGroupMembers$Response(params: GetGroupMembers$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseGroupMemberRespDto>> {
+    return getGroupMembers(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getGroupMembers$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getGroupMembers(params: GetGroupMembers$Params, context?: HttpContext): Observable<PageResponseGroupMemberRespDto> {
+    return this.getGroupMembers$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PageResponseGroupMemberRespDto>): PageResponseGroupMemberRespDto => r.body)
     );
   }
 

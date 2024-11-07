@@ -75,7 +75,7 @@ export class GroupsListComponent implements OnInit {
     )
   }
 
-  navigateToDetails(groId: number | undefined) {
-    this.router.navigate(["/users/details-group"]);
+  navigateToDetails(grpId: number | undefined) {
+    this.router.navigate(["/users/details-group", grpId]);
   }
 }

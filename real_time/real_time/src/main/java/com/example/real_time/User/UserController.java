@@ -1,7 +1,9 @@
 package com.example.real_time.User;
 
 import com.example.real_time.FriendRequest.FriendRequestRespDto;
+import com.example.real_time.Group.GroupMemberRespDto;
 import com.example.real_time.Group.GroupRespDto;
+import com.example.real_time.GroupMembership.GroupMemberStatus;
 import com.example.real_time.Message.MessageDto;
 import com.example.real_time.Pagination.PageResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -173,6 +175,39 @@ public class UserController {
                                 authentication
                         )
                 );
+    }
+
+    @GetMapping("group/members/{groupId}")
+    ResponseEntity<PageResponse<GroupMemberRespDto>> getGroupMembers(
+            @PathVariable("groupId") Integer groupId,
+            @RequestParam(name = "page", defaultValue = "0", required = false) int page,
+            @RequestParam(name = "size", defaultValue = "5", required = false) int size
+    ) {
+        return ResponseEntity.ok().
+                body(userService.getGroupMembers(
+                        page
+                        , size,
+                        groupId
+                ));
+    }
+
+    @GetMapping("groups/{group-id}")
+    ResponseEntity<GroupRespDto> getSpecGroup(
+            @PathVariable("group-id") Integer groupId
+    ) {
+        return ResponseEntity.ok().
+                body(userService.getSpecGroup(groupId));
+    }
+
+    @PostMapping("group/members/{groupId}")
+    ResponseEntity<Integer> addGroupMember(
+            @PathVariable("groupId") int groupId,
+            @RequestParam(name = "friendId") int friendId,
+            Authentication authentication
+    ) {
+        return ResponseEntity.ok().
+                body(userService.addFriendToCreatedGroup
+                        (friendId, groupId, authentication));
     }
 }
 

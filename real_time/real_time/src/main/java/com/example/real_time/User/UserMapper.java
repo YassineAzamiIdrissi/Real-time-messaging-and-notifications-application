@@ -4,6 +4,8 @@ import com.example.real_time.CustomExceptions.AppUserNotFoundException;
 import com.example.real_time.FriendRequest.FriendRequest;
 import com.example.real_time.FriendRequest.FriendRequestRepository;
 import com.example.real_time.FriendRequest.FriendRequestRespDto;
+import com.example.real_time.Group.GroupMemberRespDto;
+import com.example.real_time.GroupMembership.GroupMembership;
 import com.example.real_time.Message.Message;
 import com.example.real_time.Message.MessageDto;
 import com.example.real_time.Message.MessageRepository;
@@ -87,6 +89,19 @@ public class UserMapper {
                 receiverId(msg.getReceiver().getId()).
                 content(msg.getContent()).
                 sentAt(msg.getCreatedAt()).
+                build();
+    }
+
+    public GroupMemberRespDto membershipToGroupMemberRespDto(
+            GroupMembership membership
+    ) {
+        return GroupMemberRespDto.builder().
+                id(membership.getMember().getId()).
+                joinedAt(membership.getCreatedAt()).
+                member(membership.getMember().fullName()).
+                status(membership.getStatus()).
+                isAdmin(Objects.equals(membership.getMember().getId(),
+                        membership.getGroup().getGrpCreator().getId())).
                 build();
     }
 }

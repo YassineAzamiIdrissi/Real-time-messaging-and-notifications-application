@@ -6,10 +6,7 @@ import com.example.real_time.CustomExceptions.InvalidOperationException;
 import com.example.real_time.FriendRequest.FriendRequest;
 import com.example.real_time.FriendRequest.FriendRequestRepository;
 import com.example.real_time.FriendRequest.FriendRequestRespDto;
-import com.example.real_time.Group.Group;
-import com.example.real_time.Group.GroupMapper;
-import com.example.real_time.Group.GroupRepository;
-import com.example.real_time.Group.GroupRespDto;
+import com.example.real_time.Group.*;
 import com.example.real_time.GroupMembership.GroupMemberShipRepository;
 import com.example.real_time.GroupMembership.GroupMemberStatus;
 import com.example.real_time.GroupMembership.GroupMembership;
@@ -34,6 +31,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.example.real_time.GroupMembership.GroupMemberStatus.ADMIN;
+import static com.example.real_time.GroupMembership.GroupMemberStatus.MEMBER;
 import static com.example.real_time.Notification.NotificationType.*;
 
 @Service
@@ -406,5 +404,82 @@ public class UserService {
                 concernedGroups.getNumber(),
                 concernedGroups.getSize()
         );
+    }
+
+    public PageResponse<GroupMemberRespDto> getGroupMembers(
+            int page,
+            int size,
+            int groupId
+    ) {
+        Group concernedGroup = groupRepo.findById(groupId).
+                orElseThrow(
+                        () -> new InvalidOperationException
+                                ("Group with id " + groupId + " isn't found !")
+                );
+        Pageable pageable = PageRequest.of(page, size, Sort.by
+                ("createdAt").descending());
+        Page<GroupMembership> memberships =
+                memberShipRepo.findGroupMemberships(
+                        pageable,
+                        groupId
+                );
+        List<GroupMemberRespDto> members =
+                memberships.stream().map(
+                        userMapper::membershipToGroupMemberRespDto
+                ).toList();
+        return new PageResponse<>(
+                memberships.isFirst(),
+                memberships.isLast(),
+                members,
+                memberships.getTotalElements(),
+                memberships.getTotalPages(),
+                memberships.getNumber(),
+                memberships.getSize()
+        );
+    }
+
+    public GroupRespDto getSpecGroup(Integer groupId) {
+        return groupRepo.findById(groupId).map(groupMapper::groupToResp).
+                orElseThrow(() -> new InvalidOperationException(
+                        "Group with id " + groupId + " isn't found"
+                ));
+    }
+
+    public Integer addFriendToCreatedGroup(Integer friendId,
+                                           Integer grpId,
+                                           Authentication authentication) {
+        User concernedUser = userRepo.findById(friendId).
+                orElseThrow(() -> new AppUserNotFoundException(
+                        "User with id " + friendId + " isn't found !"
+                ));
+        User connectedUser = (User) authentication.getPrincipal();
+        boolean isAlreadyFriend = reqRepo.isAlreadyFriends(
+                concernedUser.getId(), connectedUser.getId()
+        );
+        if (!isAlreadyFriend) {
+            throw new InvalidOperationException
+                    ("This user isn't in your friends list !");
+        }
+        Group concernedGroup = groupRepo.findById(grpId).
+                orElseThrow(() -> new InvalidOperationException
+                        ("Group with id " + friendId + " isn't found !"));
+        if (!Objects.equals(concernedGroup.getGrpCreator().getId(),
+                connectedUser.getId())) {
+            throw new InvalidOperationException
+                    ("You can't modify groups you didn't create !");
+        }
+        boolean isAlreadyJoined = memberShipRepo.isUserAlreadyJoined(
+                concernedUser.getId(), concernedGroup.getId()
+        );
+        if (isAlreadyJoined) {
+            throw new InvalidOperationException
+                    ("This user belong already to this group");
+        }
+        GroupMembership membership = GroupMembership.builder().
+                group(concernedGroup).
+                member(concernedUser).
+                status(MEMBER).
+                build();
+        return memberShipRepo.save(membership).getId();
     }
 }

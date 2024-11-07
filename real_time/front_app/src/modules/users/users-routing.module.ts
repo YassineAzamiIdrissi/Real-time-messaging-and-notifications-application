@@ -47,7 +47,7 @@ const routes: Routes = [
         canActivate: [authGuard]
       },
       {
-        path: "details-group",
+        path: "details-group/:groupId",
         component: GroupDetailsComponent,
         canActivate: [authGuard]
       }

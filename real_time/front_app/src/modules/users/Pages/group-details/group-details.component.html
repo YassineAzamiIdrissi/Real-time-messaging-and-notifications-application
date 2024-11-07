@@ -1,12 +1,11 @@
 <div class="parent">
   <div class="info">
     <p class="text text-danger fw-bold">Group name : </p>
-    <p class="text text-primary fw-bold">Group name</p>
+    <p class="text text-primary fw-bold">{{ groupRespDto.name }}</p>
     <p class="text text-danger fw-bold">Creation date : </p>
-    <p class="text text-primary fw-bold">04/11/2002</p>
+    <p class="text text-primary fw-bold">{{ groupRespDto.createdAt | date }}</p>
     <p class="text text-danger fw-bold">Created by : </p>
-    <p class="text text-primary fw-bold">Yassine Azami Idrissi</p>
-
+    <p class="text text-primary fw-bold">{{ groupRespDto.creator }}</p>
   </div>
   <div class="members">
     <h4>Group members : </h4>
@@ -19,16 +18,18 @@
     <th scope="col">Member</th>
     <th scope="col">Status</th>
     <th scope="col">Joined at</th>
-    <th scope="col">Actions</th>
+    <th scope="col" *ngIf="isUserAdmin">Actions</th>
   </tr>
   </thead>
   <tbody>
-  <tr>
-    <th scope="row">1</th>
-    <td>Mark</td>
-    <td>Otto</td>
-    <td>mdo</td>
-    <td>hh</td>
+  <tr *ngFor="let member of pageResp.content">
+    <th scope="row">{{ member.id }}</th>
+    <td scope="row">{{ member.member }}</td>
+    <td>{{ member.status }}</td>
+    <td>{{ member.joinedAt | date }}</td>
+    <td *ngIf="isUserAdmin">
+      <button class="btn btn-danger">Kick</button>
+    </td>
   </tr>
   </tbody>
 </table>
