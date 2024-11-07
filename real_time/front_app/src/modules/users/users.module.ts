@@ -13,6 +13,7 @@ import { DiscussionsComponent } from './Pages/discussions/discussions.component'
 import { DiscussionCardComponent } from './Components/discussion-card/discussion-card.component';
 import { FilterPipe } from './Pages/conversation/filter.pipe';
 import { GroupsListComponent } from './Pages/groups-list/groups-list.component';
+import { GroupDetailsComponent } from './Pages/group-details/group-details.component';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import { GroupsListComponent } from './Pages/groups-list/groups-list.component';
     DiscussionsComponent,
     DiscussionCardComponent,
     FilterPipe,
-    GroupsListComponent
+    GroupsListComponent,
+    GroupDetailsComponent
   ],
     imports: [
         CommonModule,

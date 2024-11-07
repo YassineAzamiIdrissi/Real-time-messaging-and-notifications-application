@@ -1,10 +1,7 @@
-<!-- Button trigger modal -->
 <button type="button" class="btn btn-primary"
         data-bs-toggle="modal" data-bs-target="#newGroup">
-  Launch demo modal
+  Create group
 </button>
-
-<!-- Modal -->
 <div class="modal fade" id="newGroup" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -22,24 +19,22 @@
         </div>
       </div>
       <div class="modal-footer">
-        <!--
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-         -->
         <button type="button" class="btn btn-primary"
-                (click)="createGroup()">Create group
+                (click)="createGroup()">Save
         </button>
       </div>
     </div>
   </div>
 </div>
 <div class="groups-panel">
-  <div class="group-line">
+  <div class="group-line" *ngFor="let grp of content">
     <div class="left-side">
       <div class="picture-container">
         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFei77t1O-6TTTENh63BsESAoRUaY8ttuxNw&s"/>
       </div>
-      <button class="btn btn-link">
-        Some sort of group name...
+      <button class="btn btn-link"
+              (click)="navigateToDetails(grp.id)">
+        {{ grp.name }} &nbsp; &nbsp; &nbsp; ({{ grp.members }})
       </button>
     </div>
     <div class="right-side">

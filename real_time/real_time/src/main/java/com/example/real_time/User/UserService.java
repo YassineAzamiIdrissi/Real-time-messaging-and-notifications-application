@@ -7,7 +7,9 @@ import com.example.real_time.FriendRequest.FriendRequest;
 import com.example.real_time.FriendRequest.FriendRequestRepository;
 import com.example.real_time.FriendRequest.FriendRequestRespDto;
 import com.example.real_time.Group.Group;
+import com.example.real_time.Group.GroupMapper;
 import com.example.real_time.Group.GroupRepository;
+import com.example.real_time.Group.GroupRespDto;
 import com.example.real_time.GroupMembership.GroupMemberShipRepository;
 import com.example.real_time.GroupMembership.GroupMemberStatus;
 import com.example.real_time.GroupMembership.GroupMembership;
@@ -45,6 +47,7 @@ public class UserService {
     private final GroupRepository groupRepo;
     private final GroupMemberShipRepository memberShipRepo;
     private final UserMapper userMapper;
+    private final GroupMapper groupMapper;
 
     private final NotificationService notificationService;
     private final MessageService msgService;
@@ -373,5 +376,35 @@ public class UserService {
                 build();
         memberShipRepo.save(membership);
         return savedGroup.getId();
+    }
+
+    public PageResponse<GroupRespDto> readAllConnectedUserGroups(
+            int page,
+            int size,
+            Authentication authentication
+    ) {
+        User connected = (User) authentication.getPrincipal();
+        Pageable pageable = PageRequest.of(
+                page,
+                size,
+                Sort.by("createdAt").descending()
+        );
+        Page<Group> concernedGroups =
+                groupRepo.findGroupsOfConnectedUser(
+                        pageable, connected.getId()
+                );
+        List<GroupRespDto> content =
+                concernedGroups.stream().map(
+                        groupMapper::groupToResp
+                ).toList();
+        return new PageResponse<>(
+                concernedGroups.isFirst(),
+                concernedGroups.isLast(),
+                content,
+                concernedGroups.getTotalElements(),
+                concernedGroups.getTotalPages(),
+                concernedGroups.getNumber(),
+                concernedGroups.getSize()
+        );
     }
 }

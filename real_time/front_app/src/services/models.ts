@@ -5,8 +5,10 @@
 export { AuthenticationRequest } from './models/authentication-request';
 export { AuthenticationResponse } from './models/authentication-response';
 export { FriendRequestRespDto } from './models/friend-request-resp-dto';
+export { GroupRespDto } from './models/group-resp-dto';
 export { MessageDto } from './models/message-dto';
 export { PageResponseFriendRequestRespDto } from './models/page-response-friend-request-resp-dto';
+export { PageResponseGroupRespDto } from './models/page-response-group-resp-dto';
 export { PageResponseMessageDto } from './models/page-response-message-dto';
 export { PageResponseUserRespDto } from './models/page-response-user-resp-dto';
 export { PasswordsCoupleRequest } from './models/passwords-couple-request';

@@ -33,8 +33,11 @@ import { loadConversation } from '../fn/user/load-conversation';
 import { LoadConversation$Params } from '../fn/user/load-conversation';
 import { MessageDto } from '../models/message-dto';
 import { PageResponseFriendRequestRespDto } from '../models/page-response-friend-request-resp-dto';
+import { PageResponseGroupRespDto } from '../models/page-response-group-resp-dto';
 import { PageResponseMessageDto } from '../models/page-response-message-dto';
 import { PageResponseUserRespDto } from '../models/page-response-user-resp-dto';
+import { realAllConnectedUserGroups } from '../fn/user/real-all-connected-user-groups';
+import { RealAllConnectedUserGroups$Params } from '../fn/user/real-all-connected-user-groups';
 import { refuseRequest } from '../fn/user/refuse-request';
 import { RefuseRequest$Params } from '../fn/user/refuse-request';
 import { sendMessage } from '../fn/user/send-message';
@@ -271,6 +274,31 @@ export class UserService extends BaseService {
   getLastMessage(params: GetLastMessage$Params, context?: HttpContext): Observable<MessageDto> {
     return this.getLastMessage$Response(params, context).pipe(
       map((r: StrictHttpResponse<MessageDto>): MessageDto => r.body)
+    );
+  }
+
+  /** Path part for operation `realAllConnectedUserGroups()` */
+  static readonly RealAllConnectedUserGroupsPath = '/users/groups/creator';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `realAllConnectedUserGroups()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  realAllConnectedUserGroups$Response(params?: RealAllConnectedUserGroups$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseGroupRespDto>> {
+    return realAllConnectedUserGroups(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `realAllConnectedUserGroups$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  realAllConnectedUserGroups(params?: RealAllConnectedUserGroups$Params, context?: HttpContext): Observable<PageResponseGroupRespDto> {
+    return this.realAllConnectedUserGroups$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PageResponseGroupRespDto>): PageResponseGroupRespDto => r.body)
     );
   }
 

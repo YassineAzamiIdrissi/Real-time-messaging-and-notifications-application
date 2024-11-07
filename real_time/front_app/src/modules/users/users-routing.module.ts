@@ -8,6 +8,7 @@ import {RequestsListComponent} from "./Pages/requests-list/requests-list.compone
 import {ConversationComponent} from "./Pages/conversation/conversation.component";
 import {DiscussionsComponent} from "./Pages/discussions/discussions.component";
 import {GroupsListComponent} from "./Pages/groups-list/groups-list.component";
+import {GroupDetailsComponent} from "./Pages/group-details/group-details.component";
 
 const routes: Routes = [
   {
@@ -45,6 +46,11 @@ const routes: Routes = [
         component: GroupsListComponent,
         canActivate: [authGuard]
       },
+      {
+        path: "details-group",
+        component: GroupDetailsComponent,
+        canActivate: [authGuard]
+      }
     ]
   }
 ];
