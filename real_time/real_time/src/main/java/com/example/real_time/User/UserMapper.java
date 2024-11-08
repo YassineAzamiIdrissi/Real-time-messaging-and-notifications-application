@@ -6,6 +6,8 @@ import com.example.real_time.FriendRequest.FriendRequestRepository;
 import com.example.real_time.FriendRequest.FriendRequestRespDto;
 import com.example.real_time.Group.GroupMemberRespDto;
 import com.example.real_time.GroupMembership.GroupMembership;
+import com.example.real_time.GroupMessage.GroupMessage;
+import com.example.real_time.GroupMessage.GroupMessageDto;
 import com.example.real_time.Message.Message;
 import com.example.real_time.Message.MessageDto;
 import com.example.real_time.Message.MessageRepository;
@@ -102,6 +104,18 @@ public class UserMapper {
                 status(membership.getStatus()).
                 isAdmin(Objects.equals(membership.getMember().getId(),
                         membership.getGroup().getGrpCreator().getId())).
+                build();
+    }
+
+    public GroupMessageDto GroupMessageToGroupMessageDto(
+            GroupMessage grpMessage
+    ) {
+        return GroupMessageDto.builder().
+                groupId(grpMessage.getGroup().getId()).
+                senderId(grpMessage.getSender().getId()).
+                content(grpMessage.getContent()).
+                sentAt(grpMessage.getCreatedDate()).
+                senderName(grpMessage.getSender().fullName()).
                 build();
     }
 }

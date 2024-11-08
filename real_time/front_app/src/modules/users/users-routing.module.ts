@@ -53,7 +53,7 @@ const routes: Routes = [
         canActivate: [authGuard]
       },
       {
-        path: "group-chat",
+        path: "group-chat/:grpId",
         component: GroupChatComponent,
         canActivate: [authGuard]
       }

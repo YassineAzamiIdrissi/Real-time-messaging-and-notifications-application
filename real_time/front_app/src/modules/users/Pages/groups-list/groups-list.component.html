@@ -45,7 +45,9 @@
         </a>
         <ul class="dropdown-menu">
           <li><a class="dropdown-item" href="javascript:void[0]">Delete group</a></li>
-          <li><a class="dropdown-item" href="javascript:void[0]">Messages</a></li>
+          <li><a class="dropdown-item" href="javascript:void[0]"
+                 (click)="moveToMessages(grp.id)"
+          >Messages</a></li>
         </ul>
       </div>
     </div>

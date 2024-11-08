@@ -8,7 +8,6 @@ import com.example.real_time.FriendRequest.FriendRequestRepository;
 import com.example.real_time.FriendRequest.FriendRequestRespDto;
 import com.example.real_time.Group.*;
 import com.example.real_time.GroupMembership.GroupMemberShipRepository;
-import com.example.real_time.GroupMembership.GroupMemberStatus;
 import com.example.real_time.GroupMembership.GroupMembership;
 import com.example.real_time.GroupMessage.GroupMessage;
 import com.example.real_time.GroupMessage.GroupMessageDto;
@@ -511,4 +510,68 @@ public class UserService {
         groupMessageService.publishMessage(concernedGroup.getId(), grpMessage);
         return saved.getId();
     }
+
+    public PageResponse<GroupMessageDto> loadGroupChatMessages(
+            int page,
+            int size,
+            int groupId,
+            Authentication authentication
+    ) {
+        Group concernedGroup = groupRepo.findById(groupId).
+                orElseThrow(() -> new InvalidOperationException
+                        ("Group with id " + groupId + " isn't found"));
+        User connected = (User) authentication.getPrincipal();
+        Pageable pageable = PageRequest.of(
+                page,
+                size,
+                Sort.by("createdDate").ascending()
+        );
+        Page<GroupMessage> messages =
+                groupMessageRepo.getAllGroupMessages(
+                        pageable, groupId
+                );
+        List<GroupMessageDto> content =
+                messages.stream().
+                        map(userMapper::GroupMessageToGroupMessageDto).
+                        toList();
+        return new PageResponse<>(
+                messages.isFirst(),
+                messages.isLast(),
+                content,
+                messages.getTotalElements(),
+                messages.getTotalPages(),
+                messages.getNumber(),
+                messages.getSize()
+
+        );
+    }
+
+    public PageResponse<GroupRespDto> loadJoinedGroups(
+            Authentication authentication,
+            int page,
+            int size
+    ) {
+        User connected = (User) authentication.getPrincipal();
+        Pageable pageable = PageRequest.of(
+                page,
+                size,
+                Sort.by("createdAt").ascending()
+        );
+        Page<Group> groups = groupRepo.findJoinedGroupsByThisUser(
+                pageable, connected.getId()
+        );
+        List<GroupRespDto> content = groups.stream().map(
+                groupMapper::groupToResp
+        ).toList();
+        return new PageResponse<>(
+                groups.isFirst(),
+                groups.isLast(),
+                content,
+                groups.getTotalElements(),
+                groups.getTotalPages(),
+                groups.getNumber(),
+                groups.getSize()
+        );
+    }
 }
+

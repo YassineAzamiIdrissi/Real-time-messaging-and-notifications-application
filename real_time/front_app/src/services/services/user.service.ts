@@ -38,9 +38,12 @@ import { GetSpecificUser$Params } from '../fn/user/get-specific-user';
 import { GroupRespDto } from '../models/group-resp-dto';
 import { loadConversation } from '../fn/user/load-conversation';
 import { LoadConversation$Params } from '../fn/user/load-conversation';
+import { loadGroupDiscussion } from '../fn/user/load-group-discussion';
+import { LoadGroupDiscussion$Params } from '../fn/user/load-group-discussion';
 import { MessageDto } from '../models/message-dto';
 import { PageResponseFriendRequestRespDto } from '../models/page-response-friend-request-resp-dto';
 import { PageResponseGroupMemberRespDto } from '../models/page-response-group-member-resp-dto';
+import { PageResponseGroupMessageDto } from '../models/page-response-group-message-dto';
 import { PageResponseGroupRespDto } from '../models/page-response-group-resp-dto';
 import { PageResponseMessageDto } from '../models/page-response-message-dto';
 import { PageResponseUserRespDto } from '../models/page-response-user-resp-dto';
@@ -48,6 +51,8 @@ import { realAllConnectedUserGroups } from '../fn/user/real-all-connected-user-g
 import { RealAllConnectedUserGroups$Params } from '../fn/user/real-all-connected-user-groups';
 import { refuseRequest } from '../fn/user/refuse-request';
 import { RefuseRequest$Params } from '../fn/user/refuse-request';
+import { sendGroupChatMessage } from '../fn/user/send-group-chat-message';
+import { SendGroupChatMessage$Params } from '../fn/user/send-group-chat-message';
 import { sendMessage } from '../fn/user/send-message';
 import { SendMessage$Params } from '../fn/user/send-message';
 import { unfriendUser } from '../fn/user/unfriend-user';
@@ -156,6 +161,31 @@ export class UserService extends BaseService {
    */
   addGroupMember(params: AddGroupMember$Params, context?: HttpContext): Observable<number> {
     return this.addGroupMember$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `sendGroupChatMessage()` */
+  static readonly SendGroupChatMessagePath = '/users/group-chat';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `sendGroupChatMessage()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  sendGroupChatMessage$Response(params: SendGroupChatMessage$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return sendGroupChatMessage(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `sendGroupChatMessage$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  sendGroupChatMessage(params: SendGroupChatMessage$Params, context?: HttpContext): Observable<number> {
+    return this.sendGroupChatMessage$Response(params, context).pipe(
       map((r: StrictHttpResponse<number>): number => r.body)
     );
   }
@@ -461,6 +491,31 @@ export class UserService extends BaseService {
       map((r: StrictHttpResponse<{
 }>): {
 } => r.body)
+    );
+  }
+
+  /** Path part for operation `loadGroupDiscussion()` */
+  static readonly LoadGroupDiscussionPath = '/users/conversation/group/{groupId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `loadGroupDiscussion()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  loadGroupDiscussion$Response(params: LoadGroupDiscussion$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseGroupMessageDto>> {
+    return loadGroupDiscussion(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `loadGroupDiscussion$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  loadGroupDiscussion(params: LoadGroupDiscussion$Params, context?: HttpContext): Observable<PageResponseGroupMessageDto> {
+    return this.loadGroupDiscussion$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PageResponseGroupMessageDto>): PageResponseGroupMessageDto => r.body)
     );
   }
 

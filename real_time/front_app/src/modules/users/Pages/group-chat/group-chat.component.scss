@@ -33,7 +33,8 @@
   height: fit-content;
   padding: 1rem;
   max-width: 24rem;
-  position: relative;
+  display: flex;
+  gap: 2rem;
 }
 
 .own-message {
@@ -58,7 +59,20 @@
   color: #B8001F;
   font-size: 10px;
   font-weight: bold;
-  position: absolute;
   right: 0.5rem;
   bottom: 0.2rem;
+  align-self: flex-end;
+  margin-bottom: -0.5rem;
+}
+
+
+.full-msg {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.full-msg > small {
+  align-self: flex-end;
+  color: gray;
 }

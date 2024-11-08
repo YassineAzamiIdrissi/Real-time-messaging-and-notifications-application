@@ -20,4 +20,14 @@ public interface GroupRepository extends JpaRepository<Group, Integer> {
                      WHERE group.grpCreator.id = :connectedId
             """)
     Page<Group> findGroupsOfConnectedUser(Pageable pageable, Integer connectedId);
+
+    @Query("""
+                        SELECT grp FROM Group grp 
+                        WHERE EXISTS (
+                            SELECT membership FROM GroupMembership membership 
+                            WHERE membership.member.id = :userId
+                            AND membership.group.id = grp.id
+                        )
+            """)
+    Page<Group> findJoinedGroupsByThisUser(Pageable pageable, Integer userId);
 }

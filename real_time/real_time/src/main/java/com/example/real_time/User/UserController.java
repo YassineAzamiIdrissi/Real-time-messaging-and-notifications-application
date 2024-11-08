@@ -3,6 +3,7 @@ package com.example.real_time.User;
 import com.example.real_time.FriendRequest.FriendRequestRespDto;
 import com.example.real_time.Group.GroupMemberRespDto;
 import com.example.real_time.Group.GroupRespDto;
+import com.example.real_time.GroupMessage.GroupMessageDto;
 import com.example.real_time.Message.MessageDto;
 import com.example.real_time.Pagination.PageResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -209,5 +210,43 @@ public class UserController {
                         (friendId, groupId, authentication));
     }
 
+    @PostMapping("group-chat")
+    ResponseEntity<Integer> sendGroupChatMessage(
+            @RequestBody GroupMessageDto grpMessage,
+            Authentication authentication
+    ) {
+        return ResponseEntity.ok().
+                body(
+                        userService.sendGroupMessage(grpMessage, authentication)
+                );
+    }
+
+    @GetMapping("conversation/group/{groupId}")
+    ResponseEntity<PageResponse<GroupMessageDto>>
+    loadGroupDiscussion(
+            @RequestParam(name = "page", required = false, defaultValue = "0") int page,
+            @RequestParam(name = "size", required = false, defaultValue = "10") int size,
+            @PathVariable("groupId") int groupId,
+            Authentication authentication
+    ) {
+        return ResponseEntity.ok().
+                body(
+                        userService.loadGroupChatMessages
+                                (page, size, groupId, authentication)
+                );
+    }
+
+    @GetMapping("groups/joined")
+    ResponseEntity<PageResponse<GroupRespDto>>
+    loadJoinedGroups(
+            @RequestParam(name = "page", defaultValue = "0", required = false) int page,
+            @RequestParam(name = "size", defaultValue = "5", required = false) int size,
+            Authentication authentication
+    ) {
+        return ResponseEntity.ok().
+                body(
+                        userService.loadJoinedGroups(authentication, page, size)
+                );
+    }
 }
 

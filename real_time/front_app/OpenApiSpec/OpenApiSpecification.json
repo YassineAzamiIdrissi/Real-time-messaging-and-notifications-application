@@ -194,6 +194,37 @@
         }
       }
     },
+    "/users/group-chat": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "operationId": "sendGroupChatMessage",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GroupMessageDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/users/add/{userId}": {
       "post": {
         "tags": [
@@ -791,6 +822,57 @@
         }
       }
     },
+    "/users/conversation/group/{groupId}": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "operationId": "loadGroupDiscussion",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          },
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResponseGroupMessageDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/auth/activate-account": {
       "get": {
         "tags": [
@@ -872,6 +954,29 @@
           "sentAt": {
             "type": "string",
             "format": "date-time"
+          }
+        }
+      },
+      "GroupMessageDto": {
+        "type": "object",
+        "properties": {
+          "groupId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "senderId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "string"
+          },
+          "sentAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "senderName": {
+            "type": "string"
           }
         }
       },
@@ -1173,6 +1278,39 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/MessageDto"
+            }
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PageResponseGroupMessageDto": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GroupMessageDto"
             }
           },
           "totalElements": {

@@ -78,4 +78,8 @@ export class GroupsListComponent implements OnInit {
   navigateToDetails(grpId: number | undefined) {
     this.router.navigate(["/users/details-group", grpId]);
   }
+
+  moveToMessages(grpId: number | undefined) {
+    this.router.navigate(["/users/group-chat", grpId]);
+  }
 }
