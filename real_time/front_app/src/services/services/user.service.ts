@@ -49,6 +49,8 @@ import { PageResponseGroupMessageDto } from '../models/page-response-group-messa
 import { PageResponseGroupRespDto } from '../models/page-response-group-resp-dto';
 import { PageResponseMessageDto } from '../models/page-response-message-dto';
 import { PageResponseUserRespDto } from '../models/page-response-user-resp-dto';
+import { readExcludedFriends } from '../fn/user/read-excluded-friends';
+import { ReadExcludedFriends$Params } from '../fn/user/read-excluded-friends';
 import { realAllConnectedUserGroups } from '../fn/user/real-all-connected-user-groups';
 import { RealAllConnectedUserGroups$Params } from '../fn/user/real-all-connected-user-groups';
 import { refuseRequest } from '../fn/user/refuse-request';
@@ -463,6 +465,31 @@ export class UserService extends BaseService {
    */
   fetchAllThisUserFriends(params?: FetchAllThisUserFriends$Params, context?: HttpContext): Observable<PageResponseUserRespDto> {
     return this.fetchAllThisUserFriends$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PageResponseUserRespDto>): PageResponseUserRespDto => r.body)
+    );
+  }
+
+  /** Path part for operation `readExcludedFriends()` */
+  static readonly ReadExcludedFriendsPath = '/users/friends/excluded-grp/{grpId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `readExcludedFriends()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  readExcludedFriends$Response(params: ReadExcludedFriends$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseUserRespDto>> {
+    return readExcludedFriends(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `readExcludedFriends$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  readExcludedFriends(params: ReadExcludedFriends$Params, context?: HttpContext): Observable<PageResponseUserRespDto> {
+    return this.readExcludedFriends$Response(params, context).pipe(
       map((r: StrictHttpResponse<PageResponseUserRespDto>): PageResponseUserRespDto => r.body)
     );
   }

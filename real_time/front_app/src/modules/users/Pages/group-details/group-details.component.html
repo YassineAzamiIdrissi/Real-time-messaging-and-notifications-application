@@ -64,8 +64,13 @@
             </div>
             <div class="right-side">
               <button class="btn btn-success"
-                      (click)="addUserToGroup(friend.id)">Add
+                      *ngIf="!friend.belongsToGroup"
+                      (click)="addUserToGroup(friend)">Add
               </button>
+              <p class="text text-success fw-bold"
+                 *ngIf="friend.belongsToGroup">
+                Joined
+              </p>
             </div>
           </div>
         </div>

@@ -4,13 +4,14 @@ import com.example.real_time.CustomExceptions.AppUserNotFoundException;
 import com.example.real_time.FriendRequest.FriendRequest;
 import com.example.real_time.FriendRequest.FriendRequestRepository;
 import com.example.real_time.FriendRequest.FriendRequestRespDto;
+import com.example.real_time.Group.Group;
 import com.example.real_time.Group.GroupMemberRespDto;
+import com.example.real_time.GroupMembership.GroupMemberShipRepository;
 import com.example.real_time.GroupMembership.GroupMembership;
 import com.example.real_time.GroupMessage.GroupMessage;
 import com.example.real_time.GroupMessage.GroupMessageDto;
 import com.example.real_time.Message.Message;
 import com.example.real_time.Message.MessageDto;
-import com.example.real_time.Message.MessageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +21,8 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class UserMapper {
     private final FriendRequestRepository reqRepo;
-    private final MessageRepository msgRepo;
     private final UserRepository userRepo;
+    private final GroupMemberShipRepository membershipRepo;
 
     public UserRespDto userToUserRespDto
             (User user, User connected) {
@@ -42,12 +43,26 @@ public class UserMapper {
                 build();
     }
 
-    public UserRespDto requestToFriendDto(FriendRequest request, User connected) {
+    public UserRespDto requestToFriendDto(FriendRequest request, User connected,
+                                          Group group) {
         User friend;
         if (Objects.equals(request.getSender().getId(), connected.getId())) {
             friend = request.getReceiver();
         } else {
             friend = request.getSender();
+        }
+        if (group != null) {
+            var joined = membershipRepo.isUserAlreadyJoined(
+                    friend.getId(), group.getId()
+            );
+            return UserRespDto.builder().
+                    id(friend.getId()).
+                    firstname(friend.getFirstName()).
+                    lastname(friend.getLastName()).
+                    isFriend(true).
+                    joined(friend.getCreatedAt()).
+                    belongsToGroup(joined).
+                    build();
         }
         return UserRespDto.builder().
                 id(friend.getId()).

@@ -136,7 +136,7 @@ public class UserService {
         List<UserRespDto> content =
                 userFriends.stream().
                         map((req) -> userMapper.requestToFriendDto(
-                                req, connectedUser
+                                req, connectedUser, null
                         )).
                         toList();
         return new PageResponse<>(
@@ -574,6 +574,80 @@ public class UserService {
         );
     }
 
+    public PageResponse<UserRespDto>
+    readFriendsNotJoinedToGroup(
+            int page,
+            int size,
+            Integer grpId,
+            Authentication authentication) {
+        User connected = (User) authentication.getPrincipal();
+        Group concernedGroup = groupRepo.findById(grpId).
+                orElseThrow(() -> new InvalidOperationException(
+                        "Group with id " + grpId
+                ));
+        Pageable pageable = PageRequest.of(
+                page,
+                size,
+                Sort.by("createdAt").descending()
+        );
+        Page<FriendRequest> friends = reqRepo.getAllThisUserFriends(
+                pageable, connected.getId()
+        );
+        List<UserRespDto> content =
+                friends.stream().
+                        map((req) -> userMapper.requestToFriendDto(
+                                req, connected, concernedGroup
+                        )).
+                        toList();
+        return new PageResponse<>(
+                friends.isFirst(),
+                friends.isLast(),
+                content,
+                friends.getTotalElements(),
+                friends.getTotalPages(),
+                friends.getNumber(),
+                friends.getSize()
+        );
+    }
 
+    public Integer kickUserFromGroup(
+            Authentication authentication,
+            Integer groupId,
+            Integer userId
+    ) {
+        User connected = (User) authentication.getPrincipal();
+        User concernedMember = userRepo.findById(userId).
+                orElseThrow(() -> new InvalidOperationException(
+                        "User with id " + userId + " isn't found !"
+                ));
+        Group concernedGroup = groupRepo.findById(groupId).orElseThrow(
+                () -> new InvalidOperationException("Group with " +
+                        groupId +
+                        " isn't found")
+        );
+        if (Objects.equals(concernedMember.getId(), concernedGroup.getGrpCreator().
+                getId())) {
+            throw new InvalidOperationException("An admin can't be kicked !");
+        }
+        if (!Objects.equals(connected.getId(),
+                concernedGroup.getGrpCreator().getId())) {
+            throw new InvalidOperationException
+                    ("You can't carry out this action.., since you aren't an admin of this " +
+                            "grp");
+        }
+        boolean isAlreadyGroup =
+                memberShipRepo.isUserAlreadyJoined(
+                        userId, groupId
+                );
+        if (!isAlreadyGroup) {
+            throw new InvalidOperationException("User doesn't already belong to " +
+                    "the given group !");
+        }
+        memberShipRepo.deleteByMemberAndGroupId(
+                userId,
+                groupId
+        );
+        return userId;
+    }
 }
 

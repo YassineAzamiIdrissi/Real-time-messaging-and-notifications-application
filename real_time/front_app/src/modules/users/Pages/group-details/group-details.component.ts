@@ -6,6 +6,7 @@ import {GroupRespDto} from "../../../../services/models/group-resp-dto";
 import {PageResponseGroupMemberRespDto} from "../../../../services/models/page-response-group-member-resp-dto";
 import {TokenService} from "../../../../services/Token/token.service";
 import {UserRespDto} from "../../../../services/models/user-resp-dto";
+import {GroupMemberRespDto} from "../../../../services/models/group-member-resp-dto";
 
 @Component({
   selector: 'app-group-details',
@@ -78,7 +79,8 @@ export class GroupDetailsComponent implements OnInit {
   }
 
   fetchUserFriends() {
-    this.userService.fetchAllThisUserFriends({
+    this.userService.readExcludedFriends({
+      grpId: this.groupId,
       page: this.page,
       size: this.size
     }).subscribe({
@@ -90,21 +92,30 @@ export class GroupDetailsComponent implements OnInit {
         this.totalPages = resp.totalPages as number;
       },
       error: (err) => {
-
+        this.toasterService.error("Check console", "Fetching Friends failed");
+        console.log(err);
       }
     });
   }
 
-  addUserToGroup(friendId: number | undefined) {
+  addUserToGroup(friend: UserRespDto | undefined) {
+    const grpMember: GroupMemberRespDto = {}
+    grpMember.member = friend?.firstname + " " + friend?.lastname;
+    grpMember.status = "MEMBER";
+    grpMember.joinedAt = new Date().toDateString();
+    grpMember.admin = false;
     this.userService.addGroupMember({
       groupId: this.groupId,
-      friendId: friendId as number
+      friendId: friend?.id as number
     }).subscribe({
       next: (resp) => {
-        this.toasterService.success("User added to the group",);
-        setTimeout(() => {
-          this.router.navigate([0]);
-        }, 2000);
+        this.toasterService.success("User added to the group");
+        if (this.pageResp.content) {
+          this.pageResp.content.unshift(grpMember);
+        }
+        if (friend) {
+          friend.belongsToGroup = true;
+        }
       },
       error: (err) => {
         console.log(err);

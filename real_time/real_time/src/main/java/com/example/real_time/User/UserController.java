@@ -248,5 +248,36 @@ public class UserController {
                         userService.loadJoinedGroups(authentication, page, size)
                 );
     }
+
+    @GetMapping("friends/excluded-grp/{grpId}")
+    ResponseEntity<PageResponse<UserRespDto>>
+    readExcludedFriends(
+            @PathVariable("grpId") Integer grpId,
+            @RequestParam(name = "page", required = false, defaultValue = "0") int page,
+            @RequestParam(name = "size", required = false, defaultValue = "5") int size,
+            Authentication authentication
+    ) {
+        return ResponseEntity.ok().
+                body(
+                        userService.readFriendsNotJoinedToGroup(
+                                page, size, grpId, authentication
+                        )
+                );
+    }
+
+    @DeleteMapping("groups/remove/{userId}")
+    ResponseEntity<Integer> deleteUserFromGrp(
+            @PathVariable("userId") Integer userId,
+            @RequestParam(name = "grpId") Integer grpId,
+            Authentication authentication
+    ) {
+        return ResponseEntity.ok().
+                body(userService.kickUserFromGroup(
+                        authentication,
+                        userId,
+                        grpId
+                ));
+    }
+
 }
 

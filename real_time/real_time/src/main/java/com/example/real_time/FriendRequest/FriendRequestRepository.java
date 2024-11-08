@@ -1,5 +1,6 @@
 package com.example.real_time.FriendRequest;
 
+import com.example.real_time.User.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -69,5 +70,19 @@ public interface FriendRequestRepository extends JpaRepository<FriendRequest, In
                       request.accepted = true  
             """)
     FriendRequest findFriendShip(Integer connectedId, Integer friendId);
+
+    @Query("""
+                        SELECT req FROM FriendRequest req 
+                        WHERE (req.sender.id = :connectedId OR 
+                        req.receiver.id = :connectedId) AND  
+                        req.accepted = true 
+                        AND NOT EXISTS 
+                        (
+                            SELECT membership FROM GroupMembership membership
+                            WHERE membership.group.id = :grpId
+                        )
+            """)
+    Page<FriendRequest> findNotJoinedFriendsToGroup(Pageable pageable,
+                                                    Integer grpId, Integer connectedId);
 }
 
