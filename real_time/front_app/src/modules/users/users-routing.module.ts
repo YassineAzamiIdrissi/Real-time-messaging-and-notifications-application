@@ -10,6 +10,7 @@ import {DiscussionsComponent} from "./Pages/discussions/discussions.component";
 import {GroupsListComponent} from "./Pages/groups-list/groups-list.component";
 import {GroupDetailsComponent} from "./Pages/group-details/group-details.component";
 import {GroupChatComponent} from "./Pages/group-chat/group-chat.component";
+import {JoinedGroupsListComponent} from "./Pages/joined-groups-list/joined-groups-list.component";
 
 const routes: Routes = [
   {
@@ -55,6 +56,11 @@ const routes: Routes = [
       {
         path: "group-chat/:grpId",
         component: GroupChatComponent,
+        canActivate: [authGuard]
+      },
+      {
+        path: "joined",
+        component: JoinedGroupsListComponent,
         canActivate: [authGuard]
       }
     ]

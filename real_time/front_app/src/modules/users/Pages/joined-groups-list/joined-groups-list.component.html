@@ -1,8 +1,4 @@
-<h3 class="mt-3 mb-3">Created group</h3>
-<button type="button" class="btn btn-primary"
-        data-bs-toggle="modal" data-bs-target="#newGroup">
-  Create group
-</button>
+<h3>Joined groups..</h3>
 <div class="modal fade" id="newGroup" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -14,14 +10,13 @@
         <div class="mb-3">
           <label for="grpName" class="form-label">Group name : </label>
           <input type="text" class="form-control" id="grpName"
-                 [(ngModel)]="grpName"
                  name="grpName"
           >
         </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary"
-                (click)="createGroup()">Save
+        >Save
         </button>
       </div>
     </div>
@@ -34,8 +29,8 @@
         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFei77t1O-6TTTENh63BsESAoRUaY8ttuxNw&s"/>
       </div>
       <button class="btn btn-link"
-              (click)="navigateToDetails(grp.id)">
-        {{ grp.name }} &nbsp; &nbsp; &nbsp; ({{ grp.members }})
+              (click)="moveToDetails(grp.id)">
+        {{ grp.name }} &nbsp; &nbsp; &nbsp; {{ grp.members }}
       </button>
     </div>
     <div class="right-side">
@@ -48,7 +43,7 @@
         <ul class="dropdown-menu">
           <li><a class="dropdown-item" href="javascript:void[0]">Delete group</a></li>
           <li><a class="dropdown-item" href="javascript:void[0]"
-                 (click)="moveToMessages(grp.id)"
+                 (click)="goToGroupMessages(grp.id)"
           >Messages</a></li>
         </ul>
       </div>

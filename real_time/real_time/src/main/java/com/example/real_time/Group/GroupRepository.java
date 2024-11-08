@@ -26,8 +26,9 @@ public interface GroupRepository extends JpaRepository<Group, Integer> {
                         WHERE EXISTS (
                             SELECT membership FROM GroupMembership membership 
                             WHERE membership.member.id = :userId
-                            AND membership.group.id = grp.id
-                        )
+                            AND membership.group.id = grp.id 
+                        ) 
+                        AND grp.grpCreator.id != :userId
             """)
     Page<Group> findJoinedGroupsByThisUser(Pageable pageable, Integer userId);
 }

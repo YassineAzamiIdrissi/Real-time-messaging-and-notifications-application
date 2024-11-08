@@ -40,6 +40,8 @@ import { loadConversation } from '../fn/user/load-conversation';
 import { LoadConversation$Params } from '../fn/user/load-conversation';
 import { loadGroupDiscussion } from '../fn/user/load-group-discussion';
 import { LoadGroupDiscussion$Params } from '../fn/user/load-group-discussion';
+import { loadJoinedGroups } from '../fn/user/load-joined-groups';
+import { LoadJoinedGroups$Params } from '../fn/user/load-joined-groups';
 import { MessageDto } from '../models/message-dto';
 import { PageResponseFriendRequestRespDto } from '../models/page-response-friend-request-resp-dto';
 import { PageResponseGroupMemberRespDto } from '../models/page-response-group-member-resp-dto';
@@ -387,6 +389,31 @@ export class UserService extends BaseService {
   getSpecGroup(params: GetSpecGroup$Params, context?: HttpContext): Observable<GroupRespDto> {
     return this.getSpecGroup$Response(params, context).pipe(
       map((r: StrictHttpResponse<GroupRespDto>): GroupRespDto => r.body)
+    );
+  }
+
+  /** Path part for operation `loadJoinedGroups()` */
+  static readonly LoadJoinedGroupsPath = '/users/groups/joined';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `loadJoinedGroups()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  loadJoinedGroups$Response(params?: LoadJoinedGroups$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseGroupRespDto>> {
+    return loadJoinedGroups(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `loadJoinedGroups$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  loadJoinedGroups(params?: LoadJoinedGroups$Params, context?: HttpContext): Observable<PageResponseGroupRespDto> {
+    return this.loadJoinedGroups$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PageResponseGroupRespDto>): PageResponseGroupRespDto => r.body)
     );
   }
 

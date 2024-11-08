@@ -15,6 +15,7 @@ import { FilterPipe } from './Pages/conversation/filter.pipe';
 import { GroupsListComponent } from './Pages/groups-list/groups-list.component';
 import { GroupDetailsComponent } from './Pages/group-details/group-details.component';
 import { GroupChatComponent } from './Pages/group-chat/group-chat.component';
+import { JoinedGroupsListComponent } from './Pages/joined-groups-list/joined-groups-list.component';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { GroupChatComponent } from './Pages/group-chat/group-chat.component';
     FilterPipe,
     GroupsListComponent,
     GroupDetailsComponent,
-    GroupChatComponent
+    GroupChatComponent,
+    JoinedGroupsListComponent
   ],
     imports: [
         CommonModule,
