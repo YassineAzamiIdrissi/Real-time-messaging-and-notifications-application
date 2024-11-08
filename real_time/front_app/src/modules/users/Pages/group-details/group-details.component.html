@@ -39,7 +39,9 @@
     <td>{{ member.status }}</td>
     <td>{{ member.joinedAt | date }}</td>
     <td *ngIf="isUserAdmin">
-      <button class="btn btn-danger" *ngIf="member.id != currentUserId">Kick</button>
+      <button class="btn btn-danger" *ngIf="member.id != currentUserId"
+              (click)="kickMember(member.id)">Kick
+      </button>
     </td>
   </tr>
   </tbody>

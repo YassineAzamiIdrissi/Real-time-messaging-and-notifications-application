@@ -17,7 +17,8 @@
   <div class="custom-panel">
     <div class="full-msg" *ngFor="let msg of content">
       <small class="fw-bold" *ngIf="msg.senderId != currentId">
-        {{ msg.senderName }}
+        {{ msg.senderName }} &nbsp; &nbsp;
+        <span class="text-danger fw-bold" *ngIf="msg.userKicked">(Kicked)</span>
       </small>
       <div
         [class]="msg.senderId == currentId ? 'message own-message':

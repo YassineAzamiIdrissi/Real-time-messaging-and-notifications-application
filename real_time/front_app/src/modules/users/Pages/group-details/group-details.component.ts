@@ -122,4 +122,26 @@ export class GroupDetailsComponent implements OnInit {
       }
     })
   }
+
+  kickMember(memberId: number | undefined) {
+    this.userService.deleteUserFromGrp(
+      {
+        userId: memberId as number,
+        grpId: this.groupId
+      }
+    ).subscribe({
+      next: (resp) => {
+        if (this.pageResp.content) {
+          this.pageResp.content = this.pageResp.content?.filter(
+            (member) => member.id != memberId
+          );
+        }
+
+      },
+      error: (err) => {
+        this.toasterService.error("Unable to kick member");
+        console.log(err);
+      }
+    })
+  }
 }

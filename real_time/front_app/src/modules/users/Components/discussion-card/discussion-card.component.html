@@ -1,14 +1,14 @@
 <div class="parent">
   <div class="left-side">
     <div class="pic-container">
-      <img [src]="image"/>
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMg_4QMb_SkaPs0XXddwSldTXcgQCi2tdk0w&s"/>
     </div>
     <div class="left-side-texts">
       <h6 class="user-name">{{ username }}</h6>
       <p class="last-message"
          [style]="this.lastMessageText == 'Start a discussion now !' ?
          'color:green':'color:gray; font-weight:bold'">{{
-          lastMessage
+          lastMessage?.content
         }}</p>
     </div>
   </div>

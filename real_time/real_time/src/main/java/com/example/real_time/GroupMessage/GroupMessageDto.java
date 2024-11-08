@@ -19,4 +19,5 @@ public class GroupMessageDto {
     private String content;
     private LocalDateTime sentAt;
     private String senderName;
+    private boolean isUserKicked;
 }

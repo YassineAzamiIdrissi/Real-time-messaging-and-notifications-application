@@ -119,18 +119,24 @@ public class UserMapper {
                 status(membership.getStatus()).
                 isAdmin(Objects.equals(membership.getMember().getId(),
                         membership.getGroup().getGrpCreator().getId())).
+
                 build();
     }
 
     public GroupMessageDto GroupMessageToGroupMessageDto(
             GroupMessage grpMessage
     ) {
+        boolean isUserKicked = membershipRepo.isUserAlreadyJoined(
+                grpMessage.getSender().getId(),
+                grpMessage.getGroup().getId()
+        );
         return GroupMessageDto.builder().
                 groupId(grpMessage.getGroup().getId()).
                 senderId(grpMessage.getSender().getId()).
                 content(grpMessage.getContent()).
                 sentAt(grpMessage.getCreatedDate()).
                 senderName(grpMessage.getSender().fullName()).
+                isUserKicked(!isUserKicked).
                 build();
     }
 }

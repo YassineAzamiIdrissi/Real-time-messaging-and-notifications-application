@@ -21,6 +21,8 @@ import { createGroup } from '../fn/user/create-group';
 import { CreateGroup$Params } from '../fn/user/create-group';
 import { deleteConversation } from '../fn/user/delete-conversation';
 import { DeleteConversation$Params } from '../fn/user/delete-conversation';
+import { deleteUserFromGrp } from '../fn/user/delete-user-from-grp';
+import { DeleteUserFromGrp$Params } from '../fn/user/delete-user-from-grp';
 import { fetchAllThisUserFriends } from '../fn/user/fetch-all-this-user-friends';
 import { FetchAllThisUserFriends$Params } from '../fn/user/fetch-all-this-user-friends';
 import { getAllReceivedRequests } from '../fn/user/get-all-received-requests';
@@ -599,6 +601,31 @@ export class UserService extends BaseService {
       map((r: StrictHttpResponse<{
 }>): {
 } => r.body)
+    );
+  }
+
+  /** Path part for operation `deleteUserFromGrp()` */
+  static readonly DeleteUserFromGrpPath = '/users/groups/remove/{userId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteUserFromGrp()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteUserFromGrp$Response(params: DeleteUserFromGrp$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return deleteUserFromGrp(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `deleteUserFromGrp$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteUserFromGrp(params: DeleteUserFromGrp$Params, context?: HttpContext): Observable<number> {
+    return this.deleteUserFromGrp$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
     );
   }
 

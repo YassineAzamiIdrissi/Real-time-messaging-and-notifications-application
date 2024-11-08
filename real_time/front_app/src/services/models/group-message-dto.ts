@@ -8,4 +8,5 @@ export interface GroupMessageDto {
   senderId?: number;
   senderName?: string;
   sentAt?: string;
+  userKicked?: boolean;
 }

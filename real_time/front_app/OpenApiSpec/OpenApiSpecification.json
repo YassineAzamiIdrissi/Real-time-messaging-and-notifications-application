@@ -1026,6 +1026,47 @@
           }
         }
       }
+    },
+    "/users/groups/remove/{userId}": {
+      "delete": {
+        "tags": [
+          "user"
+        ],
+        "operationId": "deleteUserFromGrp",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "grpId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1070,6 +1111,9 @@
           },
           "senderName": {
             "type": "string"
+          },
+          "userKicked": {
+            "type": "boolean"
           }
         }
       },
